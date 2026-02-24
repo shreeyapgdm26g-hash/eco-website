@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FutureLock | Your Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #F7F1E7;
+      --surface: #FFF9F0;
+      --ink: #1F2A24;
+      --muted: #516158;
+      --green: #1F7A4A;
+      --green2:#2EA56A;
+      --line: rgba(31,42,36,0.12);
+      --shadow: 0 18px 40px rgba(23, 40, 30, 0.12);
+      --radius: 18px;
+      --warn: #C98A00;
+      --warnbg: rgba(244, 180, 0, 0.14);
+      --bad: #B94040;
+      --badbg: rgba(185, 64, 64, 0.12);
+      --okbg: rgba(46,165,106,0.14);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(46,165,106,0.18), transparent 55%),
+        radial-gradient(900px 500px at 95% 20%, rgba(31,122,74,0.16), transparent 60%),
+        linear-gradient(180deg, var(--bg), #F3EBDD);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1180px; margin:0 auto; padding:22px 18px 70px;}
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 8px 6px 18px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700;}
+    .logo{
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      box-shadow: 0 10px 20px rgba(31,122,74,0.18);
+      position:relative; overflow:hidden;
+    }
+    .logo:before{
+      content:""; position:absolute; width:42px; height:42px; border-radius:16px;
+      left:-12px; top:16px; background: rgba(255,255,255,0.28); transform: rotate(22deg);
+    }
+    .brand span{font-family: Fraunces, serif; font-size: 20px;}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding: 12px 16px; border-radius: 14px;
+      border: 1px solid rgba(31,122,74,0.22);
+      cursor:pointer; font-weight:600; white-space:nowrap;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      background: rgba(255,255,255,0.55);
+    }
+    .btn:hover{transform: translateY(-1px);}
+    .btn.primary{
+      border:none; color:#fff;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      box-shadow: 0 14px 28px rgba(31,122,74,0.22);
+    }
+    .btn.danger{
+      border:none; color:#fff;
+      background: linear-gradient(135deg, #b94040, #e05b5b);
+      box-shadow: 0 14px 28px rgba(185,64,64,0.22);
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 12px; border-radius: 999px;
+      border: 1px solid rgba(31,122,74,0.18);
+      background: rgba(255,255,255,0.65);
+      color: var(--muted);
+      font-size: 13px; font-weight: 600;
+    }
+    .dot{
+      width:10px; height:10px; border-radius: 50%;
+      background: var(--green2);
+      box-shadow: 0 0 0 6px rgba(46,165,106,0.14);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      align-items:start;
+    }
+
+    .card{
+      background: rgba(255, 249, 240, 0.82);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .pad{padding:18px;}
+
+    h1{
+      margin: 10px 0 8px;
+      font-family: Fraunces, serif;
+      font-size: clamp(30px, 3.8vw, 42px);
+      letter-spacing: -0.4px;
+      line-height: 1.05;
+    }
+    .sub{margin:0; color: var(--muted); font-size: 15px;}
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap: 14px;
+      align-items:center;
+      padding: 18px;
+    }
+    .heroArt{
+      border-radius: 18px;
+      border: 1px solid rgba(31,42,36,0.10);
+      background: rgba(255,255,255,0.62);
+      padding: 12px;
+      height: 220px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .kpi{
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(31,42,36,0.10);
+      border-radius: 16px;
+      padding: 12px;
+      min-height: 90px;
+    }
+    .kpi .label{
+      font-size: 12px; font-weight: 800;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      color: rgba(31,42,36,0.65);
+      margin-bottom: 6px;
+    }
+    .kpi .value{font-size: 18px; font-weight: 800;}
+    .kpi .note{font-size: 12px; color: var(--muted); margin-top: 6px;}
+
+    .badge{
+      display:inline-flex;
+      font-size: 12px; font-weight: 900;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(46,165,106,0.25);
+      background: rgba(46,165,106,0.16);
+      color: var(--green);
+      white-space: nowrap;
+    }
+    .badge.bad{
+      border-color: rgba(185,64,64,0.30);
+      background: rgba(185,64,64,0.14);
+      color: #8e2d2d;
+    }
+
+    .row{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center;
+      margin-top: 12px;
+    }
+
+    .divider{height:1px; background: rgba(31,42,36,0.12); margin: 14px 0;}
+
+    .miniTitle{
+      font-weight: 900; letter-spacing: 0.2px;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: rgba(31,42,36,0.65);
+      margin-bottom: 10px;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field{
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(31,42,36,0.10);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    label{
+      display:block; font-size: 12px; font-weight: 800;
+      color: rgba(31,42,36,0.70); margin-bottom: 6px;
+      letter-spacing: 0.2px; text-transform: uppercase;
+    }
+    input, select{
+      width:100%;
+      border-radius: 12px;
+      border: 1px solid rgba(31,42,36,0.14);
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+      background: rgba(255,255,255,0.82);
+      color: var(--ink);
+    }
+    input:focus, select:focus{
+      border-color: rgba(46,165,106,0.55);
+      box-shadow: 0 0 0 4px rgba(46,165,106,0.14);
+    }
+    .hint{margin-top: 6px; font-size: 12px; color: var(--muted);}
+
+    .progressWrap{
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(31,42,36,0.10);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .progressBar{
+      height: 14px;
+      border-radius: 999px;
+      overflow:hidden;
+      border: 1px solid rgba(31,42,36,0.12);
+      background: rgba(255,255,255,0.55);
+      display:flex;
+    }
+    .progGood{background: linear-gradient(135deg, var(--green), var(--green2)); height:100%;}
+    .progBad{background: linear-gradient(135deg, #c35c5c, #e07d7d); height:100%;}
+    .progMeta{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      margin-top: 10px; font-size: 13px; color: var(--muted);
+    }
+
+    .chartBox{
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(31,42,36,0.10);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    canvas{width:100%; height:240px; display:block;}
+
+    .faqCard{
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(31,42,36,0.10);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    details{
+      border-radius: 16px;
+      border: 1px dashed rgba(31,42,36,0.18);
+      background: rgba(255,255,255,0.45);
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight: 900;
+      color: rgba(31,42,36,0.75);
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      font-size: 12px;
+    }
+
+    .notice{
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(201,138,0,0.20);
+      background: var(--warnbg);
+      color: #6b4c00;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .notice.bad{
+      border-color: rgba(185,64,64,0.22);
+      background: var(--badbg);
+      color: #7c2c2c;
+    }
+
+    /* Modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.32);
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modal{
+      width:min(620px, 100%);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(31,42,36,0.16);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.20);
+      padding: 16px;
+    }
+    .modal h3{margin:0 0 8px; font-family: Fraunces, serif;}
+    .modal p{margin:0 0 12px; color: var(--muted);}
+    .modalActions{display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;}
+    .footer{
+      margin-top: 16px;
+      color: rgba(31,42,36,0.60);
+      font-size: 13px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      padding: 0 6px;
+    }
+
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr;}
+      .hero{grid-template-columns:1fr;}
+      .kpis{grid-template-columns:1fr;}
+      .controls{grid-template-columns:1fr;}
+      .heroArt{height: 200px;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="index.html">
+        <div class="logo" aria-hidden="true"></div>
+        <span>FutureLock</span>
+      </a>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="planner.html">Edit my plan</a>
+        <a class="btn" href="pricing.html">Pricing</a>
+        <button class="btn danger" id="redeemBtn" type="button">Redeem / Withdraw</button>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="card">
+      <div class="hero">
+        <div>
+          <div class="pill"><span class="dot"></span> Your future depends less on returns and more on discipline.</div>
+          <h1 id="headlineGoal">Your goal dashboard</h1>
+          <p class="sub">Automate financial commitments and stay on track — FutureLock keeps you honest when motivation isn’t.</p>
+
+          <div class="row" style="margin-top:12px;">
+            <span class="badge" id="goalBadge">Goal: —</span>
+            <span class="badge" id="planBadge" style="display:none;">Plan: —</span>
+            <span class="badge" id="confidenceBadge">On-time chance: —</span>
+          </div>
+
+          <div class="kpis">
+            <div class="kpi">
+              <div class="label">Target corpus at goal year</div>
+              <div class="value" id="kpiTarget">—</div>
+              <div class="note" id="kpiTargetNote">Inflation-adjusted estimate (editable below).</div>
+            </div>
+
+            <div class="kpi">
+              <div class="label">Your projected corpus</div>
+              <div class="value" id="kpiProjected">—</div>
+              <div class="note" id="kpiGapNote">Gap: —</div>
+            </div>
+
+            <div class="kpi">
+              <div class="label">Required monthly SIP</div>
+              <div class="value" id="kpiRequired">—</div>
+              <div class="note" id="kpiRequiredNote">Given returns & inflation assumptions.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="heroArt" id="heroArt"></div>
+      </div>
+    </div>
+
+    <div style="height:14px;"></div>
+
+    <div class="grid">
+      <!-- LEFT COLUMN -->
+      <div class="card">
+        <div class="pad">
+          <div class="miniTitle">Reality controls</div>
+
+          <div class="controls">
+            <div class="field">
+              <label for="goalCorpus">Goal amount today (₹)</label>
+              <input id="goalCorpus" type="number" min="0" step="50000" />
+              <div class="hint">This is the “today” cost. We inflate it to your target year.</div>
+            </div>
+
+            <div class="field">
+              <label for="inflation">Inflation assumption</label>
+              <select id="inflation">
+                <option value="0.06">6% (typical)</option>
+                <option value="0.08" selected>8% (education / lifestyle)</option>
+                <option value="0.10">10% (aggressive)</option>
+              </select>
+              <div class="hint">Used to inflate your goal to the target year.</div>
+            </div>
+
+            <div class="field">
+              <label for="returnRate">Expected return</label>
+              <select id="returnRate">
+                <option value="0.09">9% (conservative)</option>
+                <option value="0.11" selected>11% (balanced)</option>
+                <option value="0.13">13% (aggressive)</option>
+              </select>
+              <div class="hint">Long-term diversified portfolio assumption.</div>
+            </div>
+
+            <div class="field">
+              <label for="stepUp">Annual SIP step-up</label>
+              <select id="stepUp">
+                <option value="0" selected>0% (flat SIP)</option>
+                <option value="0.05">5% (gentle)</option>
+                <option value="0.10">10% (strong)</option>
+              </select>
+              <div class="hint">Automated step-up fights “bad behaviour paradox”.</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="miniTitle">Timeline tracker</div>
+          <div class="progressWrap">
+            <div class="progressBar" aria-label="Timeline progress bar">
+              <div class="progGood" id="progGood" style="width:0%"></div>
+              <div class="progBad" id="progBad" style="width:100%"></div>
+            </div>
+            <div class="progMeta">
+              <div id="progLeft">Start: —</div>
+              <div id="progMid">Today: —</div>
+              <div id="progRight">Goal: —</div>
+            </div>
+            <div class="hint" id="timelineHint" style="margin-top:8px;">
+              Green is time already used. Red is time remaining.
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="miniTitle">Projected growth line</div>
+          <div class="chartBox">
+            <canvas id="growthCanvas" width="900" height="260"></canvas>
+            <div class="hint" id="chartHint" style="margin-top:8px;">
+              Line shows projected corpus path. Dots mark year checkpoints.
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="miniTitle">Gap visualization</div>
+          <div class="notice" id="gapBox">—</div>
+
+          <div class="row" style="margin-top:12px;">
+            <button class="btn primary" id="lockBtn" type="button">Lock my plan (add friction)</button>
+            <button class="btn" id="resetBtn" type="button">Reset data</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="card">
+        <div class="pad">
+          <div class="miniTitle">Loss-aversion & social proof</div>
+
+          <div class="faqCard" id="nudgeCard">
+            <div class="badge" style="margin-bottom:10px;">Today’s reality check</div>
+            <div id="nudgeText" style="font-weight:700;">—</div>
+            <div class="hint" id="nudgeSub" style="margin-top:8px;">—</div>
+          </div>
+
+          <details open>
+            <summary>Why FutureLock works on bad behaviour paradox</summary>
+            <div style="margin-top:10px; color:var(--muted); font-size:14px;">
+              People don’t fail because they don’t know. They fail because life wins.
+              So FutureLock uses default automation, step-ups, prompts, and withdrawal friction.
+              The goal is to make the good decision the easiest decision.
+            </div>
+          </details>
+
+          <details>
+            <summary>Your numbers breakdown</summary>
+            <div style="margin-top:10px; color:var(--muted); font-size:14px;" id="breakdown">
+              —
+            </div>
+          </details>
+
+          <details>
+            <summary>Benchmarks & comparisons</summary>
+            <div style="margin-top:10px; color:var(--muted); font-size:14px;" id="benchmarks">
+              —
+            </div>
+          </details>
+
+          <div class="divider"></div>
+
+          <div class="miniTitle">Quick actions</div>
+          <div class="row">
+            <button class="btn" id="simulateDelayBtn" type="button">Simulate: delay 5 years</button>
+            <button class="btn" id="simulateStepBtn" type="button">Simulate: add 10% step-up</button>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="miniTitle">FAQ</div>
+          <details>
+            <summary>Can I change my goal later?</summary>
+            <div style="margin-top:10px; color:var(--muted); font-size:14px;">
+              Yes. But FutureLock will ask you to justify the change — because random switching is usually procrastination in disguise.
+            </div>
+          </details>
+          <details>
+            <summary>What returns are you assuming?</summary>
+            <div style="margin-top:10px; color:var(--muted); font-size:14px;">
+              You can change it above. The dashboard defaults to a balanced long-term return assumption and shows the sensitivity.
+            </div>
+          </details>
+          <details>
+            <summary>How do you stop panic withdrawals?</summary>
+            <div style="margin-top:10px; color:var(--muted); font-size:14px;">
+              We add friction: reminders, future-cost framing, and a confirmation step that forces you to slow down.
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>© <span id="year"></span> FutureLock</div>
+      <div style="display:flex; gap:12px;">
+        <a href="index.html">Home</a>
+        <span style="opacity:.5;">•</span>
+        <a href="planner.html">Plan</a>
+        <span style="opacity:.5;">•</span>
+        <a href="pricing.html">Pricing</a>
+        <span style="opacity:.5;">•</span>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Redeem modal -->
+  <div class="modalBack" id="modalBack">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Withdraw request</h3>
+      <p id="modalText">—</p>
+
+      <div class="field" style="margin-top:10px;">
+        <label for="confirmWord">Type WITHDRAW to confirm</label>
+        <input id="confirmWord" placeholder="WITHDRAW" />
+        <div class="hint">This friction is intentional. It reduces impulsive decisions.</div>
+      </div>
+
+      <div class="modalActions" style="margin-top:12px;">
+        <button class="btn" id="cancelModalBtn" type="button">Cancel</button>
+        <button class="btn danger" id="confirmModalBtn" type="button">Confirm withdraw</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const $ = (id) => document.getElementById(id);
+      const now = new Date();
+      $("year").textContent = now.getFullYear();
+
+      // ---------- helpers ----------
+      const INR = (n) => "₹" + Math.round(Number(n || 0)).toLocaleString("en-IN");
+      const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+
+      function getPlan(){
+        try{
+          const raw = localStorage.getItem("futurelock_plan_v1");
+          return raw ? JSON.parse(raw) : null;
+        }catch(e){ return null; }
+      }
+      function getPricing(){
+        try{
+          const raw = localStorage.getItem("futurelock_pricing_v1");
+          return raw ? JSON.parse(raw) : null;
+        }catch(e){ return null; }
+      }
+
+      // Future value of monthly SIP with annual step-up:
+      // Simulates month-by-month so it stays correct for step-up.
+      function fvSip(monthly, years, annualReturn, stepUp){
+        const r_m = annualReturn / 12;
+        const months = Math.max(0, Math.floor(years * 12));
+        let m = Number(monthly || 0);
+        let value = 0;
+        for(let t=1; t<=months; t++){
+          value = value * (1 + r_m) + m;
+          if(t % 12 === 0){
+            m = m * (1 + stepUp);
+          }
+        }
+        return value;
+      }
+
+      // Find required monthly SIP to reach target using binary search.
+      function requiredMonthly(targetFV, years, annualReturn, stepUp){
+        if(targetFV <= 0 || years <= 0) return 0;
+        let lo = 0, hi = Math.max(1000, targetFV / (years * 12)); // naive start
+        // bump hi until it’s enough
+        while(fvSip(hi, years, annualReturn, stepUp) < targetFV){
+          hi *= 1.8;
+          if(hi > 5e7) break; // safety cap
+        }
+        for(let i=0;i<40;i++){
+          const mid = (lo + hi) / 2;
+          const fv = fvSip(mid, years, annualReturn, stepUp);
+          if(fv >= targetFV) hi = mid;
+          else lo = mid;
+        }
+        return hi;
+      }
+
+      // Create default "goal amount today" if user didn't provide one
+      function defaultGoalCorpusToday(goal, salaryMonthly){
+        const s = Number(salaryMonthly || 0);
+
+        // If salary is missing, fallback to reasonable base amounts
+        if(!s || s <= 0){
+          if(goal === "Retirement") return 30000000;        // 3 Cr
+          if(goal === "Child Education") return 2500000;    // 25 L
+          if(goal === "Buy a Home") return 5000000;         // 50 L
+          if(goal === "Emergency Fund") return 300000;      // 3 L
+          if(goal === "Buy a Car") return 1200000;          // 12 L
+          if(goal === "Wedding") return 1000000;            // 10 L
+          if(goal === "Travel Fund") return 300000;         // 3 L
+          if(goal === "Health & Medical") return 800000;    // 8 L
+          if(goal === "Start a Business") return 2000000;   // 20 L
+          return 1000000;
+        }
+
+        // Salary-based heuristics (simple but consistent for class demo)
+        const annual = s * 12;
+
+        if(goal === "Retirement"){
+          // target corpus today = 25 * annual expenses; assume expenses = 70% of income
+          const expensesAnnual = annual * 0.70;
+          return Math.round(25 * expensesAnnual);
+        }
+        if(goal === "Child Education"){
+          // today cost ~ 30% of annual income, but at least 15L
+          return Math.max(1500000, Math.round(annual * 0.30));
+        }
+        if(goal === "Buy a Home"){
+          // today cost ~ 2.5x annual income, but at least 35L
+          return Math.max(3500000, Math.round(annual * 2.5));
+        }
+        if(goal === "Emergency Fund"){
+          // 6 months expenses
+          const monthlyExpenses = s * 0.70;
+          return Math.round(monthlyExpenses * 6);
+        }
+        if(goal === "Buy a Car"){
+          return Math.max(800000, Math.round(annual * 0.25));
+        }
+        if(goal === "Wedding"){
+          return Math.max(700000, Math.round(annual * 0.20));
+        }
+        if(goal === "Travel Fund"){
+          return Math.max(200000, Math.round(annual * 0.06));
+        }
+        if(goal === "Health & Medical"){
+          return Math.max(500000, Math.round(annual * 0.12));
+        }
+        if(goal === "Start a Business"){
+          return Math.max(1500000, Math.round(annual * 0.35));
+        }
+        if(goal === "Financial Freedom"){
+          // “freedom corpus” today ~ 10x annual expenses
+          const expensesAnnual = annual * 0.70;
+          return Math.round(10 * expensesAnnual);
+        }
+        return Math.max(500000, Math.round(annual * 0.15));
+      }
+
+      function goalInflationDefault(goal){
+        if(goal === "Child Education") return 0.08;
+        if(goal === "Health & Medical") return 0.08;
+        if(goal === "Buy a Home") return 0.06;
+        return 0.06;
+      }
+
+      function goalArtSVG(goal){
+        // Lightweight inline SVG illustrations (no external images)
+        // Uses green/beige palette and changes “story” per goal.
+        const common = 'width="100%" height="100%" viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg"';
+        if(goal === "Child Education"){
+          return `
+            <svg ${common}>
+              <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                  <stop offset="0" stop-color="#1F7A4A"/>
+                  <stop offset="1" stop-color="#2EA56A"/>
+                </linearGradient>
+              </defs>
+              <rect x="14" y="18" width="492" height="224" rx="22" fill="rgba(255,255,255,0.75)" stroke="rgba(31,42,36,0.12)"/>
+              <path d="M60 190 C 140 40, 230 240, 330 120 C 390 60, 440 70, 470 60" fill="none" stroke="rgba(31,42,36,0.16)" stroke-width="10" stroke-linecap="round"/>
+              <path d="M60 190 C 140 40, 230 240, 330 120" fill="none" stroke="url(#g)" stroke-width="10" stroke-linecap="round"/>
+              <circle cx="60" cy="190" r="10" fill="#1F7A4A"/>
+              <circle cx="330" cy="120" r="10" fill="#2EA56A"/>
+              <circle cx="470" cy="60" r="10" fill="rgba(31,42,36,0.20)"/>
+              <!-- kid -->
+              <circle cx="130" cy="170" r="16" fill="rgba(46,165,106,0.18)" />
+              <circle cx="130" cy="160" r="10" fill="#f1d7c7"/>
+              <rect x="120" y="170" width="20" height="26" rx="8" fill="#2EA56A"/>
+              <rect x="112" y="196" width="12" height="24" rx="6" fill="#1F7A4A"/>
+              <rect x="136" y="196" width="12" height="24" rx="6" fill="#1F7A4A"/>
+              <!-- graduation cap -->
+              <polygon points="402,78 470,60 402,42 334,60" fill="#1F7A4A" opacity="0.85"/>
+              <rect x="386" y="60" width="32" height="10" rx="4" fill="#2EA56A"/>
+              <text x="36" y="54" font-size="14" fill="rgba(31,42,36,0.70)" font-weight="700">Kid → Graduation</text>
+              <text x="36" y="76" font-size="12" fill="rgba(31,42,36,0.55)">Your SIP turns into choices later.</text>
+            </svg>`;
+        }
+
+        if(goal === "Retirement"){
+          return `
+            <svg ${common}>
+              <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                  <stop offset="0" stop-color="#1F7A4A"/>
+                  <stop offset="1" stop-color="#2EA56A"/>
+                </linearGradient>
+              </defs>
+              <rect x="14" y="18" width="492" height="224" rx="22" fill="rgba(255,255,255,0.75)" stroke="rgba(31,42,36,0.12)"/>
+              <path d="M60 190 C 150 70, 240 240, 350 125 C 410 60, 450 80, 470 70" fill="none" stroke="rgba(31,42,36,0.16)" stroke-width="10" stroke-linecap="round"/>
+              <path d="M60 190 C 150 70, 240 240, 350 125" fill="none" stroke="url(#g)" stroke-width="10" stroke-linecap="round"/>
+              <circle cx="60" cy="190" r="10" fill="#1F7A4A"/>
+              <circle cx="350" cy="125" r="10" fill="#2EA56A"/>
+              <circle cx="470" cy="70" r="10" fill="rgba(31,42,36,0.20)"/>
+              <!-- future self -->
+              <circle cx="120" cy="150" r="22" fill="rgba(46,165,106,0.14)" />
+              <circle cx="120" cy="142" r="14" fill="#f1d7c7"/>
+              <path d="M106 134 C112 122, 128 122, 134 134" stroke="#cfcfcf" stroke-width="6" stroke-linecap="round"/>
+              <rect x="104" y="156" width="32" height="40" rx="14" fill="#2EA56A"/>
+              <path d="M114 178 C120 186, 130 186, 136 178" stroke="#1F2A24" stroke-width="4" stroke-linecap="round" opacity="0.35"/>
+              <text x="36" y="54" font-size="14" fill="rgba(31,42,36,0.70)" font-weight="700">Future You (smiling)</text>
+              <text x="36" y="76" font-size="12" fill="rgba(31,42,36,0.55)">Discipline buys peace.</text>
+            </svg>`;
+        }
+
+        if(goal === "Buy a Home"){
+          return `
+            <svg ${common}>
+              <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                  <stop offset="0" stop-color="#1F7A4A"/>
+                  <stop offset="1" stop-color="#2EA56A"/>
+                </linearGradient>
+              </defs>
+              <rect x="14" y="18" width="492" height="224" rx="22" fill="rgba(255,255,255,0.75)" stroke="rgba(31,42,36,0.12)"/>
+              <path d="M60 190 C 150 70, 240 240, 350 125 C 410 60, 450 80, 470 70" fill="none" stroke="rgba(31,42,36,0.16)" stroke-width="10" stroke-linecap="round"/>
+              <path d="M60 190 C 150 70, 240 240, 350 125" fill="none" stroke="url(#g)" stroke-width="10" stroke-linecap="round"/>
+              <circle cx="60" cy="190" r="10" fill="#1F7A4A"/>
+              <circle cx="350" cy="125" r="10" fill="#2EA56A"/>
+              <circle cx="470" cy="70" r="10" fill="rgba(31,42,36,0.20)"/>
+              <!-- house -->
+              <polygon points="390,160 440,120 490,160" fill="#1F7A4A" opacity="0.85"/>
+              <rect x="404" y="160" width="72" height="54" rx="10" fill="#2EA56A" opacity="0.85"/>
+              <rect x="432" y="182" width="16" height="32" rx="6" fill="rgba(255,255,255,0.75)"/>
+              <text x="36" y="54" font-size="14" fill="rgba(31,42,36,0.70)" font-weight="700">Keys, not excuses</text>
+              <text x="36" y="76" font-size="12" fill="rgba(31,42,36,0.55)">Time + SIP = downpayment power.</text>
+            </svg>`;
+        }
+
+        // Default art
+        return `
+          <svg ${common}>
+            <defs>
+              <linearGradient id="g" x1="0" x2="1">
+                <stop offset="0" stop-color="#1F7A4A"/>
+                <stop offset="1" stop-color="#2EA56A"/>
+              </linearGradient>
+            </defs>
+            <rect x="14" y="18" width="492" height="224" rx="22" fill="rgba(255,255,255,0.75)" stroke="rgba(31,42,36,0.12)"/>
+            <path d="M60 190 C 150 70, 240 240, 350 125 C 410 60, 450 80, 470 70" fill="none" stroke="rgba(31,42,36,0.16)" stroke-width="10" stroke-linecap="round"/>
+            <path d="M60 190 C 150 70, 240 240, 350 125" fill="none" stroke="url(#g)" stroke-width="10" stroke-linecap="round"/>
+            <circle cx="60" cy="190" r="10" fill="#1F7A4A"/>
+            <circle cx="350" cy="125" r="10" fill="#2EA56A"/>
+            <circle cx="470" cy="70" r="10" fill="rgba(31,42,36,0.20)"/>
+            <text x="36" y="54" font-size="14" fill="rgba(31,42,36,0.70)" font-weight="700">Discipline → Outcome</text>
+            <text x="36" y="76" font-size="12" fill="rgba(31,42,36,0.55)">Small steps, big endings.</text>
+          </svg>`;
+      }
+
+      function drawGrowth(canvas, points, targetLine){
+        const ctx = canvas.getContext("2d");
+        const W = canvas.width, H = canvas.height;
+        ctx.clearRect(0,0,W,H);
+
+        // padding
+        const pad = {l: 40, r: 14, t: 18, b: 28};
+        const innerW = W - pad.l - pad.r;
+        const innerH = H - pad.t - pad.b;
+
+        // find max
+        const maxY = Math.max(targetLine || 0, ...points.map(p=>p.y), 1);
+        const minY = 0;
+
+        // axes (subtle)
+        ctx.globalAlpha = 0.7;
+        ctx.strokeStyle = "rgba(31,42,36,0.20)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(pad.l, pad.t);
+        ctx.lineTo(pad.l, pad.t + innerH);
+        ctx.lineTo(pad.l + innerW, pad.t + innerH);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+
+        // target line
+        if(targetLine && targetLine > 0){
+          const yT = pad.t + innerH - ( (targetLine - minY) / (maxY - minY) ) * innerH;
+          ctx.strokeStyle = "rgba(201,138,0,0.55)";
+          ctx.setLineDash([6,6]);
+          ctx.beginPath();
+          ctx.moveTo(pad.l, yT);
+          ctx.lineTo(pad.l + innerW, yT);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = "rgba(107,76,0,0.80)";
+          ctx.font = "12px Inter, Arial";
+          ctx.fillText("Target", pad.l + 6, yT - 6);
+        }
+
+        // line
+        ctx.strokeStyle = "rgba(31,122,74,0.85)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        points.forEach((p,i)=>{
+          const x = pad.l + (p.xNorm * innerW);
+          const y = pad.t + innerH - ((p.y - minY)/(maxY - minY))*innerH;
+          if(i===0) ctx.moveTo(x,y);
+          else ctx.lineTo(x,y);
+        });
+        ctx.stroke();
+
+        // dots
+        ctx.fillStyle = "rgba(46,165,106,0.9)";
+        points.forEach((p,i)=>{
+          const x = pad.l + (p.xNorm * innerW);
+          const y = pad.t + innerH - ((p.y - minY)/(maxY - minY))*innerH;
+          ctx.beginPath();
+          ctx.arc(x,y,4,0,Math.PI*2);
+          ctx.fill();
+        });
+
+        // labels
+        ctx.fillStyle = "rgba(31,42,36,0.60)";
+        ctx.font = "12px Inter, Arial";
+        ctx.fillText("Year 0", pad.l, pad.t + innerH + 18);
+        ctx.fillText("Goal", pad.l + innerW - 26, pad.t + innerH + 18);
+      }
+
+      // ---------- load data ----------
+      const plan = getPlan();
+      const pricing = getPricing();
+
+      if(!plan){
+        // no plan means user didn’t Save & Continue properly
+        $("headlineGoal").textContent = "No plan data found";
+        $("goalBadge").textContent = "Goal: —";
+        $("confidenceBadge").textContent = "On-time chance: —";
+        $("heroArt").innerHTML = goalArtSVG("Default");
+        $("gapBox").classList.add("bad");
+        $("gapBox").textContent = "Go back to the Plan page, fill it, and click Save & Continue so FutureLock can build your dashboard.";
+        $("breakdown").textContent = "No stored plan found in localStorage.futurelock_plan_v1.";
+        return;
+      }
+
+      const goal = (plan.goal === "Other") ? (plan.otherGoal || "Other") : plan.goal;
+      const salary = Number(plan.salaryMonthly || 0);
+      const sip = Number(plan.monthlyInvestment || 0);
+      const startYear = Number(plan.startYear || now.getFullYear());
+      const targetYear = Number(plan.targetYear || (startYear + 10));
+      const yearsToGoal = Math.max(0, targetYear - startYear);
+
+      $("goalBadge").textContent = "Goal: " + goal;
+
+      if(pricing && pricing.plan){
+        $("planBadge").style.display = "inline-flex";
+        $("planBadge").textContent = "Plan: " + pricing.plan;
+      }
+
+      $("headlineGoal").textContent = goal + " dashboard";
+      $("heroArt").innerHTML = goalArtSVG(goal);
+
+      // defaults based on goal
+      const inflDefault = goalInflationDefault(goal);
+      $("inflation").value = String(inflDefault);
+
+      // if risk exists, adjust return default mildly
+      const risk = (plan.risk || "Moderate");
+      if(risk === "Conservative") $("returnRate").value = "0.09";
+      if(risk === "Aggressive") $("returnRate").value = "0.13";
+
+      // default goal amount today
+      const defaultCorpus = defaultGoalCorpusToday(goal, salary);
+      $("goalCorpus").value = String(defaultCorpus);
+
+      // ---------- Nudges (random per visit) ----------
+      function nudgePack(goal, yrs, req, current, delta5yr, socialPct){
+        const extra = Math.max(0, delta5yr);
+        const msgs = [
+          {
+            t: `Delay is expensive. If you wait 5 years, you may need about ${INR(extra)} more per month to reach the same goal.`,
+            s: `Loss aversion works: your future costs more when present-you procrastinates.`
+          },
+          {
+            t: `Your current SIP is ${INR(current)}. The “on-track” SIP is ${INR(req)}.`,
+            s: current >= req ? `You’re ahead. Keep it boring and consistent.` : `A small step-up can close the gap without pain.`
+          },
+          {
+            t: `${socialPct}% of people who set a ${goal} goal this year chose auto-step ups.`,
+            s: `Social proof: you’re more likely to stick when the default is “continue”.`
+          }
+        ];
+        return msgs[Math.floor(Math.random() * msgs.length)];
+      }
+
+      // ---------- main compute + render ----------
+      function recompute(){
+        const inflation = Number($("inflation").value);
+        const annualReturn = Number($("returnRate").value);
+        const stepUp = Number($("stepUp").value);
+        const goalToday = Number($("goalCorpus").value || 0);
+
+        const goalFV = goalToday * Math.pow(1 + inflation, yearsToGoal);
+
+        const projectedFV = fvSip(sip, yearsToGoal, annualReturn, stepUp);
+        const reqMonthly = requiredMonthly(goalFV, yearsToGoal, annualReturn, stepUp);
+
+        const gap = goalFV - projectedFV;
+        const ratio = projectedFV / Math.max(1, goalFV);
+
+        // “on-time chance” (simple proxy for class demo)
+        // 0.0–1.0 based on ratio, with soft cap.
+        const chance = clamp(ratio, 0, 1);
+        const chancePct = Math.round(chance * 100);
+
+        $("kpiTarget").textContent = INR(goalFV);
+        $("kpiProjected").textContent = INR(projectedFV);
+        $("kpiGapNote").textContent = "Gap: " + (gap > 0 ? INR(gap) : "₹0 (ahead)");
+        $("kpiRequired").textContent = INR(reqMonthly);
+
+        // confidence badge color
+        $("confidenceBadge").textContent = "On-time chance: " + chancePct + "%";
+        $("confidenceBadge").classList.remove("bad");
+        if(chancePct < 70) $("confidenceBadge").classList.add("bad");
+
+        // gap box copy with gravity colors
+        const gapBox = $("gapBox");
+        gapBox.classList.remove("bad");
+        if(gap > 0){
+          gapBox.classList.add("bad");
+          const shortPerMonth = Math.max(0, reqMonthly - sip);
+          gapBox.textContent = `You’re currently short by about ${INR(gap)} at the goal date. A monthly increase of ~${INR(shortPerMonth)} (or adding step-up) can bring you back on track.`;
+        }else{
+          gapBox.textContent = `You’re on track (or ahead). Your job now is simple: don’t sabotage it. Keep the SIP boring and automatic.`;
+        }
+
+        // timeline progress
+        const todayYear = now.getFullYear();
+        const clampedToday = clamp(todayYear, startYear, targetYear);
+        const used = (clampedToday - startYear);
+        const usedPct = yearsToGoal > 0 ? (used / yearsToGoal) * 100 : 100;
+        const goodW = clamp(usedPct, 0, 100);
+        $("progGood").style.width = goodW + "%";
+        $("progBad").style.width = (100 - goodW) + "%";
+        $("progLeft").textContent = "Start: " + startYear;
+        $("progMid").textContent = "Today: " + clampedToday;
+        $("progRight").textContent = "Goal: " + targetYear;
+        $("timelineHint").textContent =
+          `You have ${Math.max(0, targetYear - clampedToday)} years left. FutureLock cares more about consistency than motivation.`;
+
+        // chart points (yearly checkpoints)
+        const pts = [];
+        const steps = Math.max(2, Math.min(12, yearsToGoal + 1));
+        for(let i=0;i<steps;i++){
+          const y = (yearsToGoal) * (i/(steps-1));
+          const fv = fvSip(sip, y, annualReturn, stepUp);
+          pts.push({ xNorm: i/(steps-1), y: fv });
+        }
+        drawGrowth($("growthCanvas"), pts, goalFV);
+
+        // breakdown text
+        const stepText = stepUp > 0 ? `${Math.round(stepUp*100)}% step-up yearly` : "no step-up";
+        $("breakdown").innerHTML =
+          `Start year: <b>${startYear}</b> • Target year: <b>${targetYear}</b> • Horizon: <b>${yearsToGoal} years</b><br/>
+           Your SIP: <b>${INR(sip)}</b> per month • Assumed return: <b>${Math.round(annualReturn*100)}%</b> • ${stepText}<br/>
+           Goal today: <b>${INR(goalToday)}</b> • Inflation: <b>${Math.round(inflation*100)}%</b> → Goal at target: <b>${INR(goalFV)}</b><br/>
+           Required SIP: <b>${INR(reqMonthly)}</b> • Projected corpus: <b>${INR(projectedFV)}</b>`;
+
+        // benchmarks (social proof + inflation comparison)
+        const eduInfl = (goal === "Child Education") ? 0.08 : inflation;
+        const benchLine =
+          goal === "Child Education"
+            ? `Education costs often rise fast. At <b>${Math.round(eduInfl*100)}%</b> inflation, your goal grows sharply — that’s why automation matters.`
+            : `At <b>${Math.round(inflation*100)}%</b> inflation, delaying hurts more than people expect.`;
+
+        // random social proof % (demo)
+        const socialPct = 58 + Math.floor(Math.random()*28); // 58–85
+        $("benchmarks").innerHTML =
+          `${benchLine}<br/><br/>
+           Social proof (demo): <b>${socialPct}%</b> of people who set a “${goal}” goal this year chose auto-nudges or step-ups.<br/>
+           Your SIP rate: <b>${salary > 0 ? Math.round((sip/salary)*100) : 0}%</b> of salary.`;
+
+        // nudge card (random + includes real numbers)
+        const delayReq = requiredMonthly(goalFV, Math.max(1, yearsToGoal - 5), annualReturn, stepUp);
+        const delta5yr = Math.max(0, delayReq - reqMonthly);
+        const n = nudgePack(goal, yearsToGoal, reqMonthly, sip, delta5yr, socialPct);
+        $("nudgeText").textContent = n.t;
+        $("nudgeSub").textContent = n.s;
+      }
+
+      // bind controls
+      ["goalCorpus","inflation","returnRate","stepUp"].forEach(id=>{
+        $(id).addEventListener("input", recompute);
+        $(id).addEventListener("change", recompute);
+      });
+
+      // Simulators
+      $("simulateDelayBtn").addEventListener("click", () => {
+        const annualReturn = Number($("returnRate").value);
+        const stepUp = Number($("stepUp").value);
+        const inflation = Number($("inflation").value);
+        const goalToday = Number($("goalCorpus").value || 0);
+        const goalFV = goalToday * Math.pow(1 + inflation, yearsToGoal);
+        const reqNow = requiredMonthly(goalFV, yearsToGoal, annualReturn, stepUp);
+        const reqLate = requiredMonthly(goalFV, Math.max(1, yearsToGoal - 5), annualReturn, stepUp);
+        const extra = Math.max(0, reqLate - reqNow);
+
+        $("nudgeText").textContent =
+          `If you delay by 5 years, your required SIP can jump by about ${INR(extra)} per month (same goal, less time).`;
+        $("nudgeSub").textContent = `This is why FutureLock pushes defaults and reminders when life gets busy.`;
+      });
+
+      $("simulateStepBtn").addEventListener("click", () => {
+        $("stepUp").value = "0.10";
+        recompute();
+        $("nudgeText").textContent = `Adding a 10% yearly step-up is a clean way to beat inertia without feeling the pinch today.`;
+        $("nudgeSub").textContent = `It turns future salary growth into future goal certainty.`;
+      });
+
+      // Lock plan (adds friction flag)
+      $("lockBtn").addEventListener("click", () => {
+        localStorage.setItem("futurelock_lock_mode", "true");
+        $("nudgeText").textContent = `Locked ✅. Withdrawals will now require extra confirmation.`;
+        $("nudgeSub").textContent = `Friction is a feature, not a bug.`;
+      });
+
+      // Reset
+      $("resetBtn").addEventListener("click", () => {
+        if(confirm("This will clear your saved plan and pricing. Continue?")){
+          localStorage.removeItem("futurelock_plan_v1");
+          localStorage.removeItem("futurelock_pricing_v1");
+          localStorage.removeItem("futurelock_lock_mode");
+          localStorage.removeItem("futurelock_b2b_user");
+          window.location.href = "planner.html";
+        }
+      });
+
+      // Redeem modal friction
+      const modalBack = $("modalBack");
+      const openModal = (text) => { $("modalText").textContent = text; modalBack.style.display = "flex"; $("confirmWord").value=""; };
+      const closeModal = () => { modalBack.style.display = "none"; };
+
+      $("cancelModalBtn").addEventListener("click", closeModal);
+      modalBack.addEventListener("click", (e) => { if(e.target === modalBack) closeModal(); });
+
+      $("redeemBtn").addEventListener("click", () => {
+        const lock = localStorage.getItem("futurelock_lock_mode") === "true";
+        const msg = lock
+          ? `Withdrawing now can reduce your future options for “${goal}”. This pause is intentional.`
+          : `Withdrawing now can reduce your future options for “${goal}”. Are you sure?`;
+        openModal(msg);
+      });
+
+      $("confirmModalBtn").addEventListener("click", () => {
+        const word = ($("confirmWord").value || "").trim().toUpperCase();
+        if(word !== "WITHDRAW"){
+          alert("Please type WITHDRAW to confirm.");
+          return;
+        }
+        closeModal();
+        alert("Withdrawal requested (demo). In a real app, this would start the redemption workflow.");
+      });
+
+      // initial render
+      recompute();
+    });
+  </script>
+</body>
+</html>
