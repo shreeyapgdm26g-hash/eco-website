@@ -602,33 +602,29 @@
       }
 
       function saveData() {
-        if (!validateForm()) return;
+   if (!validateForm()) return;
 
-        const payload = {
-          goal: goalEl.value,
-          otherGoal: otherGoalEl.value.trim(),
-          salaryMonthly: Number(salaryEl.value || 0),
-          monthlyInvestment: Number(investEl.value || 0),
-          startYear: Number(startYearEl.value || 0),
-          targetYear: Number(targetYearEl.value || 0),
-          notes: $("notes").value.trim(),
-          age: Number($("age").value || 0),
-          risk: $("risk").value,
-          existingSavings: Number($("existingSavings").value || 0),
-          dependents: $("dependents").value,
-          savedAt: new Date().toISOString()
-        };
+   const payload = {
+      goal: goalEl.value,
+      otherGoal: otherGoalEl.value.trim(),
+      salaryMonthly: Number(salaryEl.value || 0),
+      monthlyInvestment: Number(investEl.value || 0),
+      startYear: Number(startYearEl.value || 0),
+      targetYear: Number(targetYearEl.value || 0),
+      notes: $("notes").value.trim(),
+      age: Number($("age").value || 0),
+      risk: $("risk").value,
+      existingSavings: Number($("existingSavings").value || 0),
+      dependents: $("dependents").value,
+      savedAt: new Date().toISOString()
+   };
 
-        localStorage.setItem("futurelock_plan_v1", JSON.stringify(payload));
-        <// If employee is B2B, skip pricing, else go to pricing
-const isB2B = localStorage.getItem("futurelock_b2b_user") === "true";
+   localStorage.setItem("futurelock_plan_v1", JSON.stringify(payload));
 
-if (isB2B) {
-  window.location.href = "dashboard.html";   // final page (you’ll make it later)
-} else {
-  window.location.href = "pricing.html";     // pricing page you just made
-} >
-
+   // ✅ Redirect to pricing page
+   window.location.href = "pricing.html";
+}
+      
       // Mark manual edits
       investEl.addEventListener("input", () => { investEl.dataset.userEdited = "true"; updateSummary(); });
       targetYearEl.addEventListener("input", () => { targetYearEl.dataset.userEdited = "true"; updateSummary(); });
