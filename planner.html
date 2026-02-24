@@ -118,7 +118,6 @@
 
     form{padding: 14px 18px 18px;}
     .grid2{display:grid; grid-template-columns: 1fr 1fr; gap: 12px;}
-    .grid1{display:grid; grid-template-columns: 1fr; gap: 12px;}
     .field{
       background: rgba(255,255,255,0.62);
       border: 1px solid rgba(31,42,36,0.10);
@@ -181,7 +180,6 @@
       font-size: 12px;
     }
 
-    /* Right panel */
     .sidePad{padding: 18px;}
     .sideTitle{
       font-weight: 800; letter-spacing: 0.2px;
@@ -253,7 +251,6 @@
     </div>
 
     <div class="layout">
-      <!-- LEFT: FORM -->
       <div class="card">
         <div class="cardHead">
           <div class="pill"><span class="dot"></span> Build your plan (editable by employee)</div>
@@ -369,7 +366,6 @@
         </form>
       </div>
 
-      <!-- RIGHT: LIVE SUMMARY -->
       <div class="card">
         <div class="sidePad">
           <div class="sideTitle">Live summary</div>
@@ -452,209 +448,278 @@
   </div>
 
   <script>
-    // Defaults
-    const now = new Date();
-    document.getElementById("year").textContent = now.getFullYear();
-    const startYearEl = document.getElementById("startYear");
-    const targetYearEl = document.getElementById("targetYear");
-    startYearEl.value = now.getFullYear();
-    targetYearEl.value = now.getFullYear() + 30; // retirement-ish default timeline
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("FutureLock planner.js loaded ✅");
 
-    const goalEl = document.getElementById("goal");
-    const otherWrap = document.getElementById("otherGoalWrap");
-    const otherGoalEl = document.getElementById("otherGoal");
-    const salaryEl = document.getElementById("salary");
-    const investEl = document.getElementById("monthlyInvestment");
+      // Safe selector
+      const $ = (id) => document.getElementById(id);
 
-    const sumGoal = document.getElementById("sumGoal");
-    const sumBadge = document.getElementById("sumBadge");
-    const sumSalary = document.getElementById("sumSalary");
-    const sumInvest = document.getElementById("sumInvest");
-    const sumPct = document.getElementById("sumPct");
-    const sumYears = document.getElementById("sumYears");
-    const nudgeBox = document.getElementById("nudgeBox");
-    const fearCompare = document.getElementById("fearCompare");
+      // Required IDs check (won't break the page)
+      const required = ["year","goal","otherGoalWrap","otherGoal","salary","monthlyInvestment","startYear","targetYear",
+                        "sumGoal","sumBadge","sumSalary","sumInvest","sumPct","sumYears","nudgeBox","fearCompare",
+                        "saveBtn","saveBtn2","notes","age","risk","existingSavings","dependents"];
+      const missing = required.filter(id => !$(id));
+      if (missing.length) console.warn("Missing IDs (live summary may not work):", missing);
 
-    // Helper format
-    const INR = (n) => {
-      const x = Number(n || 0);
-      return "₹" + Math.round(x).toLocaleString("en-IN");
-    };
+      const now = new Date();
+      $("year").textContent = now.getFullYear();
 
-    // Auto-suggest monthly investment as % of salary (employer default)
-    // Default suggestion: 10% (min 1000) and rounded to nearest 500
-    function suggestInvestment(){
-      const s = Number(salaryEl.value || 0);
-      if(!s || s <= 0) return;
-      const raw = Math.max(1000, s * 0.10);
-      const rounded = Math.round(raw / 500) * 500;
-      // Only overwrite if empty or previously auto-filled
-      if(!investEl.dataset.userEdited){
-        investEl.value = rounded;
-      }
-    }
+      const goalEl = $("goal");
+      const otherWrap = $("otherGoalWrap");
+      const otherGoalEl = $("otherGoal");
+      const salaryEl = $("salary");
+      const investEl = $("monthlyInvestment");
+      const startYearEl = $("startYear");
+      const targetYearEl = $("targetYear");
 
-    investEl.addEventListener("input", () => {
-      investEl.dataset.userEdited = "true";
-      updateSummary();
-    });
+      const sumGoal = $("sumGoal");
+      const sumBadge = $("sumBadge");
+      const sumSalary = $("sumSalary");
+      const sumInvest = $("sumInvest");
+      const sumPct = $("sumPct");
+      const sumYears = $("sumYears");
+      const nudgeBox = $("nudgeBox");
+      const fearCompare = $("fearCompare");
 
-    // Goal change
-    goalEl.addEventListener("change", () => {
-      const val = goalEl.value;
-      if(val === "Other"){
-        otherWrap.style.display = "block";
-        otherGoalEl.focus();
-      }else{
-        otherWrap.style.display = "none";
-        otherGoalEl.value = "";
-      }
+      // Defaults (only if empty)
+      if (!startYearEl.value) startYearEl.value = now.getFullYear();
+      if (!targetYearEl.value) targetYearEl.value = now.getFullYear() + 30;
 
-      // Adjust default target year a bit by goal type (nice UX)
-      const y = Number(startYearEl.value || now.getFullYear());
-      if(val === "Child Education") targetYearEl.value = y + 15;
-      else if(val === "Buy a Home") targetYearEl.value = y + 8;
-      else if(val === "Emergency Fund") targetYearEl.value = y + 2;
-      else if(val === "Buy a Car") targetYearEl.value = y + 4;
-      else if(val === "Wedding") targetYearEl.value = y + 3;
-      else if(val === "Travel Fund") targetYearEl.value = y + 2;
-      else if(val === "Retirement") targetYearEl.value = y + 30;
-
-      updateSummary();
-    });
-
-    otherGoalEl.addEventListener("input", updateSummary);
-    salaryEl.addEventListener("input", () => { suggestInvestment(); updateSummary(); });
-    startYearEl.addEventListener("input", updateSummary);
-    targetYearEl.addEventListener("input", updateSummary);
-
-    function updateSummary(){
-      const g = goalEl.value === "Other" ? (otherGoalEl.value.trim() || "Other") : goalEl.value;
-      sumGoal.textContent = g;
-
-      // Badge: Default if retirement, else Edited
-      if(goalEl.value === "Retirement"){
-        sumBadge.textContent = "Default";
-      }else{
-        sumBadge.textContent = "Edited";
-      }
-
-      const s = Number(salaryEl.value || 0);
-      const m = Number(investEl.value || 0);
-      sumSalary.textContent = INR(s);
-      sumInvest.textContent = INR(m);
-
-      if(s > 0 && m > 0){
-        const pct = (m / s) * 100;
-        sumPct.textContent = pct.toFixed(0) + "% of salary";
-      }else{
-        sumPct.textContent = "—";
-      }
-
-      const sy = Number(startYearEl.value || 0);
-      const ty = Number(targetYearEl.value || 0);
-      const years = (sy && ty) ? (ty - sy) : null;
-      sumYears.textContent = (years !== null) ? (years + " years") : "—";
-
-      // Behavioural nudge / loss framing
-      if(s > 0 && m > 0 && years !== null){
-        // A gentle “delay cost” message without scaring too much:
-        const bumped = Math.round((m * 1.20) / 500) * 500; // +20% later burden (illustrative nudge)
-        nudgeBox.textContent = If you delay this plan, you may need a higher monthly contribution later. Starting now keeps it closer to ${INR(m)} instead of something like ${INR(bumped)}.;
-      } else {
-        nudgeBox.textContent = "Small commitment now beats big regret later. A tiny increase today usually reduces future stress.";
-      }
-
-      fearCompare.textContent = (years !== null && years > 0)
-        ? Your timeline is ${years} years. Starting now makes the plan lighter than starting later.
-        : "Tip: start today so future-you doesn’t need a bigger monthly burden.";
-    }
-
-    function validateForm(){
-      const g = goalEl.value;
-      const other = otherGoalEl.value.trim();
-      const salary = Number(salaryEl.value || 0);
-      const invest = Number(investEl.value || 0);
-      const sy = Number(startYearEl.value || 0);
-      const ty = Number(targetYearEl.value || 0);
-
-      if(g === "Other" && !other){
-        alert("Please type your goal name under ‘Other’.");
-        return false;
-      }
-      if(!salary || salary <= 0){
-        alert("Please enter your monthly in-hand salary.");
-        return false;
-      }
-      if(!invest || invest <= 0){
-        alert("Please enter your monthly investment amount.");
-        return false;
-      }
-      if(!sy || !ty || ty <= sy){
-        alert("Please enter a valid start year and target year (target year must be after start year).");
-        return false;
-      }
-      return true;
-    }
-
-    function saveData(){
-      if(!validateForm()) return;
-
-      const payload = {
-        goal: goalEl.value,
-        otherGoal: otherGoalEl.value.trim(),
-        salaryMonthly: Number(salaryEl.value || 0),
-        monthlyInvestment: Number(investEl.value || 0),
-        startYear: Number(startYearEl.value || 0),
-        targetYear: Number(targetYearEl.value || 0),
-        notes: document.getElementById("notes").value.trim(),
-        age: Number(document.getElementById("age").value || 0),
-        risk: document.getElementById("risk").value,
-        existingSavings: Number(document.getElementById("existingSavings").value || 0),
-        dependents: document.getElementById("dependents").value,
-        savedAt: new Date().toISOString()
+      const INR = (n) => {
+        const x = Number(n || 0);
+        return "₹" + Math.round(x).toLocaleString("en-IN");
       };
 
-      localStorage.setItem("futurelock_plan_v1", JSON.stringify(payload));
-      alert("Saved ✅ (Next page can now read this data from localStorage.)");
+      function suggestInvestment() {
+        const s = Number(salaryEl.value || 0);
+        if (!s || s <= 0) return;
 
-      // Optional: if you create the next page later, redirect like this:
-      // window.location.href = "dashboard.html";
-    }
+        const raw = Math.max(1000, s * 0.10);
+        const rounded = Math.round(raw / 500) * 500;
 
-    document.getElementById("saveBtn").addEventListener("click", saveData);
-    document.getElementById("saveBtn2").addEventListener("click", saveData);
-
-    // On load, prefill if saved before
-    (function loadSaved(){
-      try{
-        const raw = localStorage.getItem("futurelock_plan_v1");
-        if(!raw) { updateSummary(); return; }
-        const p = JSON.parse(raw);
-
-        if(p.goal) goalEl.value = p.goal;
-        if(p.goal === "Other"){
-          otherWrap.style.display = "block";
-          otherGoalEl.value = p.otherGoal || "";
+        // Only overwrite if user hasn't manually edited
+        if (!investEl.dataset.userEdited || investEl.dataset.userEdited === "false") {
+          investEl.value = rounded;
         }
-        if(p.salaryMonthly) salaryEl.value = p.salaryMonthly;
-        if(p.monthlyInvestment) { investEl.value = p.monthlyInvestment; investEl.dataset.userEdited = "true"; }
-        if(p.startYear) startYearEl.value = p.startYear;
-        if(p.targetYear) targetYearEl.value = p.targetYear;
-        if(p.notes) document.getElementById("notes").value = p.notes;
-        if(p.age) document.getElementById("age").value = p.age;
-        if(p.risk) document.getElementById("risk").value = p.risk;
-        if(p.existingSavings) document.getElementById("existingSavings").value = p.existingSavings;
-        if(p.dependents) document.getElementById("dependents").value = p.dependents;
-
-        updateSummary();
-      }catch(e){
-        updateSummary();
       }
-    })();
 
-    // Initial suggestion + summary
-    updateSummary();
+      function setGoalVisibility() {
+        const val = goalEl.value;
+        if (val === "Other") {
+          otherWrap.style.display = "block";
+        } else {
+          otherWrap.style.display = "none";
+          otherGoalEl.value = "";
+        }
+      }
+
+      function adjustDefaultTargetYear() {
+        const val = goalEl.value;
+        const y = Number(startYearEl.value || now.getFullYear());
+
+        // Only auto-adjust target year if user hasn't edited it manually
+        if (targetYearEl.dataset.userEdited === "true") return;
+
+        if (val === "Child Education") targetYearEl.value = y + 15;
+        else if (val === "Buy a Home") targetYearEl.value = y + 8;
+        else if (val === "Emergency Fund") targetYearEl.value = y + 2;
+        else if (val === "Buy a Car") targetYearEl.value = y + 4;
+        else if (val === "Wedding") targetYearEl.value = y + 3;
+        else if (val === "Travel Fund") targetYearEl.value = y + 2;
+        else if (val === "Retirement") targetYearEl.value = y + 30;
+      }
+
+      function updateSummary() {
+        try {
+          const chosenGoal = goalEl.value === "Other"
+            ? (otherGoalEl.value.trim() || "Other")
+            : goalEl.value;
+
+          sumGoal.textContent = chosenGoal;
+          sumBadge.textContent = (goalEl.value === "Retirement") ? "Default" : "Edited";
+
+          const s = Number(salaryEl.value || 0);
+          const m = Number(investEl.value || 0);
+
+          sumSalary.textContent = INR(s);
+          sumInvest.textContent = INR(m);
+
+          if (s > 0 && m > 0) {
+            const pct = (m / s) * 100;
+            sumPct.textContent = pct.toFixed(0) + "% of salary";
+          } else {
+            sumPct.textContent = "—";
+          }
+
+          const sy = Number(startYearEl.value || 0);
+          const ty = Number(targetYearEl.value || 0);
+
+          const years = (sy && ty) ? (ty - sy) : null;
+          sumYears.textContent = (years !== null && years >= 0) ? (years + " years") : "—";
+
+          if (s > 0 && m > 0 && years !== null && years > 0) {
+            const bumped = Math.round((m * 1.20) / 500) * 500;
+            nudgeBox.textContent =
+              If you delay this plan, you may need a higher monthly contribution later. Starting now keeps it closer to ${INR(m)} instead of something like ${INR(bumped)}.;
+            fearCompare.textContent =
+              Your timeline is ${years} years. Starting now makes the plan lighter than starting later.;
+          } else {
+            nudgeBox.textContent =
+              "Small commitment now beats big regret later. A tiny increase today usually reduces future stress.";
+            fearCompare.textContent =
+              "Tip: start today so future-you doesn’t need a bigger monthly burden.";
+          }
+        } catch (e) {
+          console.error("updateSummary failed:", e);
+        }
+      }
+
+      function validateForm() {
+        const g = goalEl.value;
+        const other = otherGoalEl.value.trim();
+        const salary = Number(salaryEl.value || 0);
+        const invest = Number(investEl.value || 0);
+        const sy = Number(startYearEl.value || 0);
+        const ty = Number(targetYearEl.value || 0);
+
+        if (g === "Other" && !other) {
+          alert("Please type your goal name under ‘Other’.");
+          return false;
+        }
+        if (!salary || salary <= 0) {
+          alert("Please enter your monthly in-hand salary.");
+          return false;
+        }
+        if (!invest || invest <= 0) {
+          alert("Please enter your monthly investment amount.");
+          return false;
+        }
+        if (!sy || !ty || ty <= sy) {
+          alert("Please enter a valid start year and target year (target year must be after start year).");
+          return false;
+        }
+        return true;
+      }
+
+      function saveData() {
+        if (!validateForm()) return;
+
+        const payload = {
+          goal: goalEl.value,
+          otherGoal: otherGoalEl.value.trim(),
+          salaryMonthly: Number(salaryEl.value || 0),
+          monthlyInvestment: Number(investEl.value || 0),
+          startYear: Number(startYearEl.value || 0),
+          targetYear: Number(targetYearEl.value || 0),
+          notes: $("notes").value.trim(),
+          age: Number($("age").value || 0),
+          risk: $("risk").value,
+          existingSavings: Number($("existingSavings").value || 0),
+          dependents: $("dependents").value,
+          savedAt: new Date().toISOString()
+        };
+
+        localStorage.setItem("futurelock_plan_v1", JSON.stringify(payload));
+        alert("Saved ✅");
+      }
+
+      // Mark manual edits
+      investEl.addEventListener("input", () => { investEl.dataset.userEdited = "true"; updateSummary(); });
+      targetYearEl.addEventListener("input", () => { targetYearEl.dataset.userEdited = "true"; updateSummary(); });
+
+      // Main listeners
+      const bindLive = (el) => {
+        if (!el) return;
+        el.addEventListener("input", updateSummary);
+        el.addEventListener("change", updateSummary);
+      };
+
+      bindLive(goalEl);
+      bindLive(otherGoalEl);
+      bindLive(salaryEl);
+      bindLive(investEl);
+      bindLive(startYearEl);
+      bindLive(targetYearEl);
+      bindLive($("notes"));
+      bindLive($("age"));
+      bindLive($("risk"));
+      bindLive($("existingSavings"));
+      bindLive($("dependents"));
+
+      // Extra behaviours
+      goalEl.addEventListener("change", () => {
+        setGoalVisibility();
+        adjustDefaultTargetYear();
+        updateSummary();
+      });
+
+      salaryEl.addEventListener("input", () => {
+        suggestInvestment();
+        // If we auto-set investment, we should update summary
+        updateSummary();
+      });
+
+      startYearEl.addEventListener("input", () => {
+        // Only auto-adjust target year if user hasn't edited target year
+        adjustDefaultTargetYear();
+        updateSummary();
+      });
+
+      $("saveBtn").addEventListener("click", saveData);
+      $("saveBtn2").addEventListener("click", saveData);
+
+      // Load saved data
+      (function loadSaved() {
+        try {
+          const raw = localStorage.getItem("futurelock_plan_v1");
+          if (!raw) return;
+
+          const p = JSON.parse(raw);
+
+          if (p.goal) goalEl.value = p.goal;
+          if (p.goal === "Other") {
+            otherWrap.style.display = "block";
+            otherGoalEl.value = p.otherGoal || "";
+          } else {
+            otherWrap.style.display = "none";
+            otherGoalEl.value = "";
+          }
+
+          if (p.salaryMonthly) salaryEl.value = p.salaryMonthly;
+
+          if (p.monthlyInvestment) {
+            investEl.value = p.monthlyInvestment;
+            investEl.dataset.userEdited = "true";
+          } else {
+            investEl.dataset.userEdited = "false";
+          }
+
+          if (p.startYear) startYearEl.value = p.startYear;
+
+          if (p.targetYear) {
+            targetYearEl.value = p.targetYear;
+            targetYearEl.dataset.userEdited = "true";
+          } else {
+            targetYearEl.dataset.userEdited = "false";
+          }
+
+          if (p.notes) $("notes").value = p.notes;
+          if (p.age) $("age").value = p.age;
+          if (p.risk) $("risk").value = p.risk;
+          if (p.existingSavings) $("existingSavings").value = p.existingSavings;
+          if (p.dependents) $("dependents").value = p.dependents;
+
+        } catch (e) {
+          console.warn("Could not load saved plan:", e);
+        }
+      })();
+
+      // Initialize UI state
+      setGoalVisibility();
+      // Only suggest if empty
+      if (!investEl.value) suggestInvestment();
+      updateSummary();
+    });
   </script>
 </body>
 </html>
