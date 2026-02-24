@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FutureLock | Build Your Plan</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #F7F1E7;
+      --surface: #FFF9F0;
+      --ink: #1F2A24;
+      --muted: #516158;
+      --green: #1F7A4A;
+      --green2:#2EA56A;
+      --line: rgba(31,42,36,0.12);
+      --shadow: 0 18px 40px rgba(23, 40, 30, 0.12);
+      --radius: 18px;
+      --warn: #C98A00;
+      --warnbg: rgba(244, 180, 0, 0.14);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(46,165,106,0.18), transparent 55%),
+        radial-gradient(900px 500px at 95% 20%, rgba(31,122,74,0.16), transparent 60%),
+        linear-gradient(180deg, var(--bg), #F3EBDD);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1120px; margin:0 auto; padding:22px 18px 70px;}
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 8px 6px 18px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:700;
+    }
+    .logo{
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      box-shadow: 0 10px 20px rgba(31,122,74,0.18);
+      position:relative; overflow:hidden;
+    }
+    .logo:before{
+      content:""; position:absolute; width:42px; height:42px; border-radius:16px;
+      left:-12px; top:16px; background: rgba(255,255,255,0.28); transform: rotate(22deg);
+    }
+    .brand span{font-family: Fraunces, serif; font-size: 20px;}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding: 12px 16px; border-radius: 14px;
+      border: 1px solid rgba(31,122,74,0.22);
+      cursor:pointer; font-weight:600; white-space:nowrap;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      background: rgba(255,255,255,0.55);
+    }
+    .btn:hover{transform: translateY(-1px);}
+    .btn.primary{
+      border:none; color:#fff;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      box-shadow: 0 14px 28px rgba(31,122,74,0.22);
+    }
+
+    .layout{
+      display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 18px;
+      align-items:start;
+    }
+
+    .card{
+      background: rgba(255, 249, 240, 0.78);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .cardHead{
+      padding: 18px 18px 0;
+    }
+
+    h1{
+      margin: 6px 0 8px;
+      font-family: Fraunces, serif;
+      font-size: clamp(28px, 3.6vw, 38px);
+      letter-spacing: -0.4px;
+      line-height: 1.05;
+    }
+    .sub{
+      margin:0 0 12px; color: var(--muted); font-size: 15px;
+    }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 12px; border-radius: 999px;
+      border: 1px solid rgba(31,122,74,0.18);
+      background: rgba(255,255,255,0.65);
+      color: var(--muted);
+      font-size: 13px; font-weight: 600;
+    }
+    .dot{
+      width:10px; height:10px; border-radius: 50%;
+      background: var(--green2);
+      box-shadow: 0 0 0 6px rgba(46,165,106,0.14);
+    }
+
+    form{padding: 14px 18px 18px;}
+    .grid2{display:grid; grid-template-columns: 1fr 1fr; gap: 12px;}
+    .grid1{display:grid; grid-template-columns: 1fr; gap: 12px;}
+    .field{
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(31,42,36,0.10);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    label{
+      display:block; font-size: 12px; font-weight: 700;
+      color: rgba(31,42,36,0.70); margin-bottom: 6px;
+      letter-spacing: 0.2px; text-transform: uppercase;
+    }
+    input, select, textarea{
+      width:100%;
+      border-radius: 12px;
+      border: 1px solid rgba(31,42,36,0.14);
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+      background: rgba(255,255,255,0.8);
+      color: var(--ink);
+    }
+    textarea{min-height: 90px; resize: vertical;}
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(46,165,106,0.55);
+      box-shadow: 0 0 0 4px rgba(46,165,106,0.14);
+    }
+
+    .hint{
+      margin-top: 6px; font-size: 12px; color: var(--muted);
+    }
+
+    .warnbox{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: var(--warnbg);
+      border: 1px solid rgba(201, 138, 0, 0.20);
+      color: #6b4c00;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .divider{
+      height: 1px; background: rgba(31,42,36,0.12);
+      margin: 14px 0;
+    }
+
+    details{
+      border-radius: 16px;
+      border: 1px dashed rgba(31,42,36,0.20);
+      background: rgba(255,255,255,0.45);
+      padding: 10px 12px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight: 800;
+      color: rgba(31,42,36,0.75);
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      font-size: 12px;
+    }
+
+    /* Right panel */
+    .sidePad{padding: 18px;}
+    .sideTitle{
+      font-weight: 800; letter-spacing: 0.2px;
+      text-transform: uppercase; font-size: 12px; color: rgba(31,42,36,0.65);
+      margin-bottom: 10px;
+    }
+    .kpi{
+      display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:center;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(31,42,36,0.10);
+      background: rgba(255,255,255,0.62);
+      margin-bottom: 10px;
+    }
+    .kpi strong{font-size: 16px;}
+    .badge{
+      font-size: 12px; font-weight: 800;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(46,165,106,0.16);
+      color: var(--green);
+      border: 1px solid rgba(46,165,106,0.25);
+      white-space: nowrap;
+    }
+    .miniSvg{
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(31,42,36,0.10);
+      background: rgba(255,255,255,0.62);
+    }
+
+    .rowActions{
+      display:flex; gap: 10px; flex-wrap:wrap; margin-top: 12px;
+      align-items:center;
+    }
+
+    .smallLink{
+      font-size: 13px; color: rgba(31,42,36,0.70);
+      text-decoration: underline; text-underline-offset: 4px;
+    }
+
+    .footer{
+      margin-top: 16px;
+      color: rgba(31,42,36,0.60);
+      font-size: 13px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      padding: 0 6px;
+    }
+
+    @media (max-width: 920px){
+      .layout{grid-template-columns: 1fr;}
+      .grid2{grid-template-columns: 1fr;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="index.html">
+        <div class="logo" aria-hidden="true"></div>
+        <span>FutureLock</span>
+      </a>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="index.html">← Back</a>
+        <button class="btn primary" type="button" id="saveBtn">Save & Continue →</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <!-- LEFT: FORM -->
+      <div class="card">
+        <div class="cardHead">
+          <div class="pill"><span class="dot"></span> Build your plan (editable by employee)</div>
+          <h1>Your goal, your timeline, your monthly commitment.</h1>
+          <p class="sub">
+            By default, FutureLock starts with <b>Retirement</b> because many employers enrol employees into a retirement plan.
+            You can change anything below.
+          </p>
+        </div>
+
+        <form id="planForm" novalidate>
+          <div class="grid2">
+            <div class="field">
+              <label for="goal">Pick your goal</label>
+              <select id="goal" name="goal" required>
+                <option value="Retirement" selected>Retirement (default)</option>
+                <option value="Child Education">Child Education</option>
+                <option value="Buy a Home">Buy a Home</option>
+                <option value="Emergency Fund">Emergency Fund</option>
+                <option value="Financial Freedom">Financial Freedom</option>
+                <option value="Buy a Car">Buy a Car</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Start a Business">Start a Business</option>
+                <option value="Travel Fund">Travel Fund</option>
+                <option value="Health & Medical">Health & Medical</option>
+                <option value="Other">Other (write your own)</option>
+              </select>
+              <div class="hint">Default is Retirement. Change it if your priority is different.</div>
+            </div>
+
+            <div class="field" id="otherGoalWrap" style="display:none;">
+              <label for="otherGoal">Your goal name</label>
+              <input id="otherGoal" name="otherGoal" placeholder="e.g., Masters abroad, Parent care, etc." />
+              <div class="hint">Only needed if you selected Other.</div>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label for="salary">Monthly in-hand salary (₹)</label>
+              <input id="salary" name="salary" type="number" min="0" step="1000" placeholder="e.g., 75000" required />
+              <div class="hint">Used to suggest a healthy default deduction (employee can edit).</div>
+            </div>
+
+            <div class="field">
+              <label for="monthlyInvestment">Monthly investment (₹)</label>
+              <input id="monthlyInvestment" name="monthlyInvestment" type="number" min="0" step="500" placeholder="Auto-suggested" required />
+              <div class="hint">We’ll auto-suggest this from salary (editable).</div>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label for="startYear">Start investing (year)</label>
+              <input id="startYear" name="startYear" type="number" min="2020" max="2100" required />
+              <div class="hint">Usually current year. Employer plans often start immediately.</div>
+            </div>
+
+            <div class="field">
+              <label for="targetYear">Target year</label>
+              <input id="targetYear" name="targetYear" type="number" min="2020" max="2100" required />
+              <div class="hint">When you want to achieve this goal.</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="notes">Anything we should know (optional)</label>
+            <textarea id="notes" name="notes" placeholder="e.g., I want a conservative plan, I have an existing SIP, I may relocate, etc."></textarea>
+            <div class="hint">This helps FutureLock personalise your portfolio and nudges.</div>
+          </div>
+
+          <div class="warnbox" id="nudgeBox">
+            Small commitment now beats big regret later. A tiny increase today usually reduces future stress.
+          </div>
+
+          <div class="divider"></div>
+
+          <details>
+            <summary>Optional details (improves portfolio design)</summary>
+            <div style="margin-top:12px;" class="grid2">
+              <div class="field">
+                <label for="age">Age</label>
+                <input id="age" name="age" type="number" min="18" max="100" placeholder="e.g., 28" />
+              </div>
+              <div class="field">
+                <label for="risk">Risk comfort</label>
+                <select id="risk" name="risk">
+                  <option value="Moderate" selected>Moderate (default)</option>
+                  <option value="Conservative">Conservative</option>
+                  <option value="Aggressive">Aggressive</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="existingSavings">Existing savings for this goal (₹)</label>
+                <input id="existingSavings" name="existingSavings" type="number" min="0" step="1000" placeholder="e.g., 200000" />
+              </div>
+              <div class="field">
+                <label for="dependents">Dependents</label>
+                <select id="dependents" name="dependents">
+                  <option value="0" selected>0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3+">3+</option>
+                </select>
+              </div>
+            </div>
+          </details>
+
+          <div class="rowActions">
+            <button class="btn primary" type="button" id="saveBtn2">Save & Continue →</button>
+            <a class="smallLink" href="index.html">Back to homepage</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT: LIVE SUMMARY -->
+      <div class="card">
+        <div class="sidePad">
+          <div class="sideTitle">Live summary</div>
+
+          <div class="kpi">
+            <div>
+              <strong id="sumGoal">Retirement</strong><br>
+              <span style="color:var(--muted); font-size:13px;">Goal selected</span>
+            </div>
+            <div class="badge" id="sumBadge">Default</div>
+          </div>
+
+          <div class="kpi">
+            <div>
+              <strong id="sumSalary">₹0</strong><br>
+              <span style="color:var(--muted); font-size:13px;">Monthly in-hand</span>
+            </div>
+            <div class="badge">Input</div>
+          </div>
+
+          <div class="kpi">
+            <div>
+              <strong id="sumInvest">₹0</strong><br>
+              <span style="color:var(--muted); font-size:13px;">Monthly investment</span>
+            </div>
+            <div class="badge" id="sumPct">—</div>
+          </div>
+
+          <div class="kpi">
+            <div>
+              <strong id="sumYears">—</strong><br>
+              <span style="color:var(--muted); font-size:13px;">Time to goal</span>
+            </div>
+            <div class="badge">Timeline</div>
+          </div>
+
+          <div class="miniSvg">
+            <div class="sideTitle" style="margin:0 0 8px;">Your progress path</div>
+            <svg width="100%" height="110" viewBox="0 0 520 110" role="img" aria-label="Progress illustration">
+              <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                  <stop offset="0" stop-color="#1F7A4A"/>
+                  <stop offset="1" stop-color="#2EA56A"/>
+                </linearGradient>
+              </defs>
+              <path d="M30 70 C 140 10, 220 110, 330 55 C 390 25, 435 40, 490 30"
+                    fill="none" stroke="rgba(31,42,36,0.18)" stroke-width="6" stroke-linecap="round"/>
+              <path id="progPath" d="M30 70 C 140 10, 220 110, 330 55"
+                    fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="30" cy="70" r="8" fill="#1F7A4A"/>
+              <circle id="midDot" cx="330" cy="55" r="8" fill="#2EA56A"/>
+              <circle cx="490" cy="30" r="8" fill="rgba(31,42,36,0.25)"/>
+              <text x="20" y="98" font-size="12" fill="rgba(31,42,36,0.65)">Today</text>
+              <text x="295" y="98" font-size="12" fill="rgba(31,42,36,0.65)">On track</text>
+              <text x="460" y="98" font-size="12" fill="rgba(31,42,36,0.65)">Goal</text>
+            </svg>
+            <div class="hint" id="fearCompare" style="margin-top:8px;">
+              Tip: start today so future-you doesn’t need a bigger monthly burden.
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="sideTitle">What happens next</div>
+          <div style="color:var(--muted); font-size:14px;">
+            On the next page we’ll show the suggested portfolio style (risk-based), and a goal timeline dashboard.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>© <span id="year"></span> FutureLock</div>
+      <div style="display:flex; gap:12px;">
+        <a href="index.html">Home</a>
+        <span style="opacity:.5;">•</span>
+        <a href="planner.html">Plan</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Defaults
+    const now = new Date();
+    document.getElementById("year").textContent = now.getFullYear();
+    const startYearEl = document.getElementById("startYear");
+    const targetYearEl = document.getElementById("targetYear");
+    startYearEl.value = now.getFullYear();
+    targetYearEl.value = now.getFullYear() + 30; // retirement-ish default timeline
+
+    const goalEl = document.getElementById("goal");
+    const otherWrap = document.getElementById("otherGoalWrap");
+    const otherGoalEl = document.getElementById("otherGoal");
+    const salaryEl = document.getElementById("salary");
+    const investEl = document.getElementById("monthlyInvestment");
+
+    const sumGoal = document.getElementById("sumGoal");
+    const sumBadge = document.getElementById("sumBadge");
+    const sumSalary = document.getElementById("sumSalary");
+    const sumInvest = document.getElementById("sumInvest");
+    const sumPct = document.getElementById("sumPct");
+    const sumYears = document.getElementById("sumYears");
+    const nudgeBox = document.getElementById("nudgeBox");
+    const fearCompare = document.getElementById("fearCompare");
+
+    // Helper format
+    const INR = (n) => {
+      const x = Number(n || 0);
+      return "₹" + Math.round(x).toLocaleString("en-IN");
+    };
+
+    // Auto-suggest monthly investment as % of salary (employer default)
+    // Default suggestion: 10% (min 1000) and rounded to nearest 500
+    function suggestInvestment(){
+      const s = Number(salaryEl.value || 0);
+      if(!s || s <= 0) return;
+      const raw = Math.max(1000, s * 0.10);
+      const rounded = Math.round(raw / 500) * 500;
+      // Only overwrite if empty or previously auto-filled
+      if(!investEl.dataset.userEdited){
+        investEl.value = rounded;
+      }
+    }
+
+    investEl.addEventListener("input", () => {
+      investEl.dataset.userEdited = "true";
+      updateSummary();
+    });
+
+    // Goal change
+    goalEl.addEventListener("change", () => {
+      const val = goalEl.value;
+      if(val === "Other"){
+        otherWrap.style.display = "block";
+        otherGoalEl.focus();
+      }else{
+        otherWrap.style.display = "none";
+        otherGoalEl.value = "";
+      }
+
+      // Adjust default target year a bit by goal type (nice UX)
+      const y = Number(startYearEl.value || now.getFullYear());
+      if(val === "Child Education") targetYearEl.value = y + 15;
+      else if(val === "Buy a Home") targetYearEl.value = y + 8;
+      else if(val === "Emergency Fund") targetYearEl.value = y + 2;
+      else if(val === "Buy a Car") targetYearEl.value = y + 4;
+      else if(val === "Wedding") targetYearEl.value = y + 3;
+      else if(val === "Travel Fund") targetYearEl.value = y + 2;
+      else if(val === "Retirement") targetYearEl.value = y + 30;
+
+      updateSummary();
+    });
+
+    otherGoalEl.addEventListener("input", updateSummary);
+    salaryEl.addEventListener("input", () => { suggestInvestment(); updateSummary(); });
+    startYearEl.addEventListener("input", updateSummary);
+    targetYearEl.addEventListener("input", updateSummary);
+
+    function updateSummary(){
+      const g = goalEl.value === "Other" ? (otherGoalEl.value.trim() || "Other") : goalEl.value;
+      sumGoal.textContent = g;
+
+      // Badge: Default if retirement, else Edited
+      if(goalEl.value === "Retirement"){
+        sumBadge.textContent = "Default";
+      }else{
+        sumBadge.textContent = "Edited";
+      }
+
+      const s = Number(salaryEl.value || 0);
+      const m = Number(investEl.value || 0);
+      sumSalary.textContent = INR(s);
+      sumInvest.textContent = INR(m);
+
+      if(s > 0 && m > 0){
+        const pct = (m / s) * 100;
+        sumPct.textContent = pct.toFixed(0) + "% of salary";
+      }else{
+        sumPct.textContent = "—";
+      }
+
+      const sy = Number(startYearEl.value || 0);
+      const ty = Number(targetYearEl.value || 0);
+      const years = (sy && ty) ? (ty - sy) : null;
+      sumYears.textContent = (years !== null) ? (years + " years") : "—";
+
+      // Behavioural nudge / loss framing
+      if(s > 0 && m > 0 && years !== null){
+        // A gentle “delay cost” message without scaring too much:
+        const bumped = Math.round((m * 1.20) / 500) * 500; // +20% later burden (illustrative nudge)
+        nudgeBox.textContent = If you delay this plan, you may need a higher monthly contribution later. Starting now keeps it closer to ${INR(m)} instead of something like ${INR(bumped)}.;
+      } else {
+        nudgeBox.textContent = "Small commitment now beats big regret later. A tiny increase today usually reduces future stress.";
+      }
+
+      fearCompare.textContent = (years !== null && years > 0)
+        ? Your timeline is ${years} years. Starting now makes the plan lighter than starting later.
+        : "Tip: start today so future-you doesn’t need a bigger monthly burden.";
+    }
+
+    function validateForm(){
+      const g = goalEl.value;
+      const other = otherGoalEl.value.trim();
+      const salary = Number(salaryEl.value || 0);
+      const invest = Number(investEl.value || 0);
+      const sy = Number(startYearEl.value || 0);
+      const ty = Number(targetYearEl.value || 0);
+
+      if(g === "Other" && !other){
+        alert("Please type your goal name under ‘Other’.");
+        return false;
+      }
+      if(!salary || salary <= 0){
+        alert("Please enter your monthly in-hand salary.");
+        return false;
+      }
+      if(!invest || invest <= 0){
+        alert("Please enter your monthly investment amount.");
+        return false;
+      }
+      if(!sy || !ty || ty <= sy){
+        alert("Please enter a valid start year and target year (target year must be after start year).");
+        return false;
+      }
+      return true;
+    }
+
+    function saveData(){
+      if(!validateForm()) return;
+
+      const payload = {
+        goal: goalEl.value,
+        otherGoal: otherGoalEl.value.trim(),
+        salaryMonthly: Number(salaryEl.value || 0),
+        monthlyInvestment: Number(investEl.value || 0),
+        startYear: Number(startYearEl.value || 0),
+        targetYear: Number(targetYearEl.value || 0),
+        notes: document.getElementById("notes").value.trim(),
+        age: Number(document.getElementById("age").value || 0),
+        risk: document.getElementById("risk").value,
+        existingSavings: Number(document.getElementById("existingSavings").value || 0),
+        dependents: document.getElementById("dependents").value,
+        savedAt: new Date().toISOString()
+      };
+
+      localStorage.setItem("futurelock_plan_v1", JSON.stringify(payload));
+      alert("Saved ✅ (Next page can now read this data from localStorage.)");
+
+      // Optional: if you create the next page later, redirect like this:
+      // window.location.href = "dashboard.html";
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", saveData);
+    document.getElementById("saveBtn2").addEventListener("click", saveData);
+
+    // On load, prefill if saved before
+    (function loadSaved(){
+      try{
+        const raw = localStorage.getItem("futurelock_plan_v1");
+        if(!raw) { updateSummary(); return; }
+        const p = JSON.parse(raw);
+
+        if(p.goal) goalEl.value = p.goal;
+        if(p.goal === "Other"){
+          otherWrap.style.display = "block";
+          otherGoalEl.value = p.otherGoal || "";
+        }
+        if(p.salaryMonthly) salaryEl.value = p.salaryMonthly;
+        if(p.monthlyInvestment) { investEl.value = p.monthlyInvestment; investEl.dataset.userEdited = "true"; }
+        if(p.startYear) startYearEl.value = p.startYear;
+        if(p.targetYear) targetYearEl.value = p.targetYear;
+        if(p.notes) document.getElementById("notes").value = p.notes;
+        if(p.age) document.getElementById("age").value = p.age;
+        if(p.risk) document.getElementById("risk").value = p.risk;
+        if(p.existingSavings) document.getElementById("existingSavings").value = p.existingSavings;
+        if(p.dependents) document.getElementById("dependents").value = p.dependents;
+
+        updateSummary();
+      }catch(e){
+        updateSummary();
+      }
+    })();
+
+    // Initial suggestion + summary
+    updateSummary();
+  </script>
+</body>
+</html>
