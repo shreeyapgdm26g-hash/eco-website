@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FutureLock | Financial Advisory</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Aesthetic palette: beige + green */
+      --bg: #F7F1E7;         /* warm beige */
+      --surface: #FFF9F0;    /* lighter beige card */
+      --ink: #1F2A24;        /* deep green-black */
+      --muted: #516158;      /* muted text */
+      --green: #1F7A4A;      /* primary green */
+      --green-2: #2EA56A;    /* accent green */
+      --line: rgba(31,42,36,0.12);
+      --shadow: 0 18px 40px rgba(23, 40, 30, 0.12);
+      --radius: 18px;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(46,165,106,0.18), transparent 55%),
+        radial-gradient(900px 500px at 95% 20%, rgba(31,122,74,0.16), transparent 60%),
+        linear-gradient(180deg, var(--bg), #F3EBDD);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    a{ color: inherit; text-decoration:none; }
+    .wrap{ max-width: 1120px; margin: 0 auto; padding: 22px 18px 70px; }
+
+    /* Top nav */
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 10px 6px 18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .logo{
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--green), var(--green-2));
+      box-shadow: 0 10px 20px rgba(31,122,74,0.18);
+      position: relative;
+      overflow:hidden;
+    }
+    .logo:before{
+      content:"";
+      position:absolute;
+      width: 42px; height: 42px;
+      border-radius: 16px;
+      left: -12px; top: 16px;
+      background: rgba(255,255,255,0.28);
+      transform: rotate(22deg);
+    }
+    .brand span{
+      font-family: Fraunces, serif;
+      font-size: 20px;
+    }
+
+    .navlinks{
+      display:flex; gap: 18px; align-items:center;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .navlinks a{
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: background 180ms ease;
+    }
+    .navlinks a:hover{
+      background: rgba(31,122,74,0.08);
+      color: var(--ink);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(31,122,74,0.22);
+      cursor:pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--green), var(--green-2));
+      color: #fff;
+      border: none;
+      box-shadow: 0 14px 28px rgba(31,122,74,0.22);
+    }
+    .btn.primary:hover{ transform: translateY(-1px); box-shadow: 0 16px 34px rgba(31,122,74,0.26); }
+    .btn.ghost{
+      background: rgba(255,255,255,0.55);
+      color: var(--ink);
+    }
+    .btn.ghost:hover{ transform: translateY(-1px); }
+
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-top: 10px;
+    }
+    .card{
+      background: rgba(255, 249, 240, 0.75);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero-main{
+      padding: 30px 28px 26px;
+      position: relative;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(31,122,74,0.18);
+      background: rgba(255,255,255,0.6);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .dot{
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green-2);
+      box-shadow: 0 0 0 6px rgba(46,165,106,0.14);
+    }
+
+    h1{
+      margin: 14px 0 10px;
+      font-family: Fraunces, serif;
+      font-size: clamp(34px, 4.2vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -0.6px;
+    }
+    .sub{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 60ch;
+    }
+
+    .cta-row{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      align-items:center;
+    }
+    .micro{
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    /* Right hero infographic */
+    .hero-side{
+      padding: 22px;
+      display:flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .side-title{
+      font-weight: 700;
+      margin: 2px 0 4px;
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+    .stat{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items:center;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(31,42,36,0.10);
+      background: rgba(255,255,255,0.62);
+    }
+    .stat strong{ font-size: 18px; }
+    .stat span{ color: var(--muted); font-size: 13px; }
+    .badge{
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(46,165,106,0.16);
+      color: var(--green);
+      border: 1px solid rgba(46,165,106,0.25);
+      white-space: nowrap;
+    }
+
+    /* Sections */
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .feature{
+      padding: 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.60);
+      transition: transform 160ms ease;
+    }
+    .feature:hover{ transform: translateY(-2px); }
+    .icon{
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(31,122,74,0.12);
+      border: 1px solid rgba(31,122,74,0.18);
+      margin-bottom: 10px;
+    }
+    .feature h3{
+      margin: 6px 0 6px;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+    .feature p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section{
+      margin-top: 22px;
+      padding: 22px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.55);
+      box-shadow: 0 12px 26px rgba(23, 40, 30, 0.07);
+    }
+    .section h2{
+      margin: 0 0 10px;
+      font-family: Fraunces, serif;
+      letter-spacing: -0.3px;
+      font-size: 26px;
+    }
+    .cols{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .list{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .loc{
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(31,42,36,0.10);
+      background: rgba(255,249,240,0.72);
+    }
+    .loc b{ display:block; margin-bottom: 4px; }
+    .footer{
+      margin-top: 22px;
+      padding: 18px 6px 0;
+      color: rgba(31,42,36,0.60);
+      font-size: 13px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items:center;
+    }
+
+    /* Responsive */
+    @media (max-width: 920px){
+      .hero{ grid-template-columns: 1fr; }
+      .cols{ grid-template-columns: 1fr; }
+      .grid3{ grid-template-columns: 1fr; }
+      .navlinks{ display:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- NAV -->
+    <div class="nav">
+      <a class="brand" href="#">
+        <div class="logo" aria-hidden="true"></div>
+        <span>FutureLock</span>
+      </a>
+
+      <div class="navlinks">
+        <a href="#about">About</a>
+        <a href="#whatwedo">What we do</a>
+        <a href="#location">Where we’re based</a>
+      </div>
+
+      <!-- Top-right CTA goes to planner page -->
+      <a class="btn primary" href="planner.html" aria-label="Start your journey">
+        Start your journey
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="pill">
+          <span class="dot" aria-hidden="true"></span>
+          Behaviour-first financial advisory, built in India
+        </div>
+
+        <h1>Start your financial independence journey — calmly, consistently, beautifully.</h1>
+        <p class="sub">
+          FutureLock helps you turn goals into a simple plan you can actually stick to.
+          We blend smart planning with gentle nudges so your progress continues even when life gets busy.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn primary" href="planner.html">
+            Start my plan
+            <span aria-hidden="true">→</span>
+          </a>
+          <a class="btn ghost" href="#about">What is FutureLock?</a>
+        </div>
+
+        <div class="micro">
+          No jargon. No pressure. Just a clear plan + a system that keeps you on track.
+        </div>
+      </div>
+
+      <!-- RIGHT CARD (Infographic-style) -->
+      <aside class="card hero-side" aria-label="Quick overview">
+        <div>
+          <div class="side-title">In 30 seconds</div>
+
+          <div class="stat">
+            <div>
+              <strong>Goal-first planning</strong><br>
+              <span>Education • Home • Retirement • Freedom</span>
+            </div>
+            <div class="badge">Simple</div>
+          </div>
+
+          <div class="stat" style="margin-top:10px;">
+            <div>
+              <strong>Consistency engine</strong><br>
+              <span>Auto reminders + step-up nudges</span>
+            </div>
+            <div class="badge">Behavioural</div>
+          </div>
+
+          <div class="stat" style="margin-top:10px;">
+            <div>
+              <strong>Transparent advice</strong><br>
+              <span>Clear, fee-aligned guidance</span>
+            </div>
+            <div class="badge">Trust</div>
+          </div>
+        </div>
+
+        <!-- Tiny “infographic” SVG -->
+        <div class="card" style="background: rgba(255,255,255,0.62); border:1px solid rgba(31,42,36,0.10); box-shadow:none; padding:14px; border-radius:16px;">
+          <div class="side-title" style="margin-bottom:10px;">Your journey visual</div>
+          <svg width="100%" height="110" viewBox="0 0 520 110" role="img" aria-label="Progress illustration">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1">
+                <stop offset="0" stop-color="#1F7A4A"/>
+                <stop offset="1" stop-color="#2EA56A"/>
+              </linearGradient>
+            </defs>
+            <!-- path -->
+            <path d="M30 70 C 140 10, 220 110, 330 55 C 390 25, 435 40, 490 30"
+                  fill="none" stroke="rgba(31,42,36,0.18)" stroke-width="6" stroke-linecap="round"/>
+            <!-- progress -->
+            <path d="M30 70 C 140 10, 220 110, 330 55"
+                  fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round"/>
+            <!-- markers -->
+            <circle cx="30" cy="70" r="8" fill="#1F7A4A"/>
+            <circle cx="330" cy="55" r="8" fill="#2EA56A"/>
+            <circle cx="490" cy="30" r="8" fill="rgba(31,42,36,0.25)"/>
+            <text x="20" y="98" font-size="12" fill="rgba(31,42,36,0.65)">Today</text>
+            <text x="305" y="98" font-size="12" fill="rgba(31,42,36,0.65)">On track</text>
+            <text x="460" y="98" font-size="12" fill="rgba(31,42,36,0.65)">Goal</text>
+          </svg>
+        </div>
+      </aside>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="whatwedo" class="grid3" aria-label="What we do">
+      <div class="feature">
+        <div class="icon" aria-hidden="true">
+          <!-- leaf icon -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M20 4C12 4 6 8 4 20c6-2 10-6 12-12Z" stroke="#1F7A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 20c4-8 8-12 16-16" stroke="#2EA56A" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>We turn goals into plans</h3>
+        <p>Pick a goal, timeline, and comfort level. We map it into a clear monthly path.</p>
+      </div>
+
+      <div class="feature">
+        <div class="icon" aria-hidden="true">
+          <!-- compass icon -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="#1F7A4A" stroke-width="2"/>
+            <path d="M15.5 8.5 14 14l-5.5 1.5L10 10l5.5-1.5Z" stroke="#2EA56A" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>We make progress easy</h3>
+        <p>Gentle nudges and reminders keep you consistent without feeling forced.</p>
+      </div>
+
+      <div class="feature">
+        <div class="icon" aria-hidden="true">
+          <!-- shield icon -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3 20 7v6c0 5-3.5 8.5-8 8.5S4 18 4 13V7l8-4Z" stroke="#1F7A4A" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M9 12l2 2 4-5" stroke="#2EA56A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>We keep it transparent</h3>
+        <p>Clear guidance, no confusing jargon, and a calm experience from start to finish.</p>
+      </div>
+    </section>
+
+    <!-- ABOUT + LOCATION -->
+    <section id="about" class="section">
+      <h2>What is FutureLock?</h2>
+      <div class="cols">
+        <div>
+          <p style="margin:0; color: var(--muted);">
+            FutureLock is an India-based financial advisory firm focused on long-term goals like education, home buying,
+            and retirement. Our approach is simple: we help you commit to a plan that fits your life, then we keep you
+            moving forward with a friendly, behaviour-aware system.
+          </p>
+
+          <ul class="list" style="margin-top:12px;">
+            <li>Goal-based planning (not product-pushing)</li>
+            <li>Progress visuals that make saving feel real</li>
+            <li>Gentle prompts that help you stick to decisions</li>
+          </ul>
+        </div>
+
+        <div id="location" class="loc">
+          <div class="icon" aria-hidden="true" style="margin:0; width:46px; height:46px;">
+            <!-- location pin -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 22s7-4.5 7-12a7 7 0 1 0-14 0c0 7.5 7 12 7 12Z" stroke="#1F7A4A" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M12 10.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z" stroke="#2EA56A" stroke-width="2"/>
+            </svg>
+          </div>
+          <div>
+            <b>Where we’re based</b>
+            <div style="color: var(--muted); font-size: 14px;">
+              FutureLock HQ: Bengaluru, India<br/>
+              Serving clients across India (online-first).
+            </div>
+            <div style="margin-top:10px;">
+              <a class="btn ghost" href="planner.html" style="padding:10px 12px;">
+                Continue to Goal Setup →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div>© <span id="year"></span> FutureLock. All rights reserved.</div>
+      <div style="display:flex; gap:12px;">
+        <a href="#about">About</a>
+        <span style="opacity:.5;">•</span>
+        <a href="planner.html">Start</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
