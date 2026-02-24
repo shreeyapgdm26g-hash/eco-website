@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FutureLock | Transparent Pricing</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #F7F1E7;
+      --surface: #FFF9F0;
+      --ink: #1F2A24;
+      --muted: #516158;
+      --green: #1F7A4A;
+      --green2:#2EA56A;
+      --line: rgba(31,42,36,0.12);
+      --shadow: 0 18px 40px rgba(23, 40, 30, 0.12);
+      --radius: 18px;
+      --warn: #C98A00;
+      --warnbg: rgba(244, 180, 0, 0.14);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(46,165,106,0.18), transparent 55%),
+        radial-gradient(900px 500px at 95% 20%, rgba(31,122,74,0.16), transparent 60%),
+        linear-gradient(180deg, var(--bg), #F3EBDD);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1120px; margin:0 auto; padding:22px 18px 70px;}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 8px 6px 18px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700;}
+    .logo{
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      box-shadow: 0 10px 20px rgba(31,122,74,0.18);
+      position:relative; overflow:hidden;
+    }
+    .logo:before{
+      content:""; position:absolute; width:42px; height:42px; border-radius:16px;
+      left:-12px; top:16px; background: rgba(255,255,255,0.28); transform: rotate(22deg);
+    }
+    .brand span{font-family: Fraunces, serif; font-size: 20px;}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding: 12px 16px; border-radius: 14px;
+      border: 1px solid rgba(31,122,74,0.22);
+      cursor:pointer; font-weight:600; white-space:nowrap;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      background: rgba(255,255,255,0.55);
+    }
+    .btn:hover{transform: translateY(-1px);}
+    .btn.primary{
+      border:none; color:#fff;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      box-shadow: 0 14px 28px rgba(31,122,74,0.22);
+    }
+    .btn.ghost{background: rgba(255,255,255,0.25);}
+    .btn.small{padding:10px 12px; border-radius: 12px; font-size: 13px;}
+
+    .card{
+      background: rgba(255, 249, 240, 0.80);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero{padding: 18px;}
+    h1{
+      margin: 6px 0 8px;
+      font-family: Fraunces, serif;
+      font-size: clamp(28px, 3.6vw, 38px);
+      letter-spacing: -0.4px;
+      line-height: 1.05;
+    }
+    .sub{margin:0; color: var(--muted); font-size: 15px;}
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 12px; border-radius: 999px;
+      border: 1px solid rgba(31,122,74,0.18);
+      background: rgba(255,255,255,0.65);
+      color: var(--muted);
+      font-size: 13px; font-weight: 600;
+    }
+    .dot{
+      width:10px; height:10px; border-radius: 50%;
+      background: var(--green2);
+      box-shadow: 0 0 0 6px rgba(46,165,106,0.14);
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      align-items:start;
+      margin-top: 14px;
+    }
+
+    .pricingGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .plan{
+      border-radius: 18px;
+      border: 1px solid rgba(31,42,36,0.12);
+      background: rgba(255,255,255,0.62);
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      min-height: 320px;
+    }
+    .plan.featured{
+      border: 1px solid rgba(46,165,106,0.35);
+      box-shadow: 0 18px 36px rgba(31,122,74,0.16);
+      background: rgba(255,255,255,0.72);
+      transform: translateY(-2px);
+    }
+    .plan h3{
+      margin:0;
+      font-family: Fraunces, serif;
+      font-size: 20px;
+      letter-spacing: -0.2px;
+    }
+    .price{
+      display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+    }
+    .price strong{font-size: 28px;}
+    .price span{color: var(--muted); font-size: 13px; font-weight: 600;}
+    .tag{
+      display:inline-flex;
+      width:max-content;
+      font-size: 12px; font-weight: 800;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(46,165,106,0.16);
+      color: var(--green);
+      border: 1px solid rgba(46,165,106,0.25);
+    }
+    ul{margin:0; padding-left: 18px; color: rgba(31,42,36,0.78); font-size: 14px;}
+    li{margin: 8px 0;}
+    .muted{color: var(--muted); font-size: 13px;}
+
+    .divider{height:1px; background: rgba(31,42,36,0.12); margin: 14px 18px;}
+    .sectionPad{padding: 0 18px 18px;}
+
+    .miniCard{
+      border-radius: 18px;
+      border: 1px solid rgba(31,42,36,0.10);
+      background: rgba(255,255,255,0.62);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .miniTitle{
+      font-weight: 800; letter-spacing: 0.2px;
+      text-transform: uppercase; font-size: 12px; color: rgba(31,42,36,0.65);
+      margin-bottom: 10px;
+    }
+
+    .kpi{
+      display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:center;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(31,42,36,0.10);
+      background: rgba(255,255,255,0.62);
+      margin-bottom: 10px;
+    }
+    .kpi strong{font-size: 16px;}
+    .badge{
+      font-size: 12px; font-weight: 800;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(46,165,106,0.16);
+      color: var(--green);
+      border: 1px solid rgba(46,165,106,0.25);
+      white-space: nowrap;
+    }
+
+    .payGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .payBtn{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(31,42,36,0.12);
+      background: rgba(255,255,255,0.70);
+      cursor:pointer;
+      font-weight: 700;
+      transition: transform 160ms ease;
+    }
+    .payBtn:hover{transform: translateY(-1px);}
+    .payBtn small{font-weight: 700; color: var(--muted);}
+
+    .warnbox{
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: var(--warnbg);
+      border: 1px solid rgba(201, 138, 0, 0.20);
+      color: #6b4c00;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .footer{
+      margin-top: 16px;
+      color: rgba(31,42,36,0.60);
+      font-size: 13px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      padding: 0 6px;
+    }
+
+    /* Modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.30);
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modal{
+      width:min(560px, 100%);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(31,42,36,0.16);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.20);
+      padding: 16px;
+    }
+    .modal h3{margin:0 0 8px; font-family: Fraunces, serif;}
+    .modal p{margin:0 0 12px; color: var(--muted);}
+    .modalActions{display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;}
+
+    @media (max-width: 980px){
+      .layout{grid-template-columns: 1fr;}
+      .pricingGrid{grid-template-columns: 1fr;}
+      .payGrid{grid-template-columns: 1fr;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="index.html">
+        <div class="logo" aria-hidden="true"></div>
+        <span>FutureLock</span>
+      </a>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="planner.html">← Back to plan</a>
+        <button class="btn primary" id="skipBtn" type="button" style="display:none;">Continue →</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hero">
+        <div class="pill"><span class="dot"></span> Transparent pricing (no hidden commissions)</div>
+        <h1>Pay for advice. Keep control of your money.</h1>
+        <p class="sub">
+          FutureLock is built for people who know what to do — but struggle to stay consistent.
+          You’re paying for behavioural enforcement: automation, nudges, and goal protection.
+        </p>
+      </div>
+
+      <div class="layout">
+        <!-- LEFT: Plans -->
+        <div>
+          <div class="pricingGrid">
+            <div class="plan">
+              <div class="tag">Starter</div>
+              <h3>Starter Plan</h3>
+              <div class="price"><strong>₹4,999</strong><span>/year</span></div>
+              <div class="muted">Best for first-time goal planners.</div>
+              <ul>
+                <li>Goal plan + target-year roadmap</li>
+                <li>Auto-invest setup guidance</li>
+                <li>Behaviour nudges (anti-panic, anti-inertia)</li>
+                <li>Quarterly check-in reminders</li>
+                <li>Email summary once/month</li>
+              </ul>
+              <div style="margin-top:auto; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn primary" type="button" data-plan="Starter" data-amt="4999">Choose Starter</button>
+                <button class="btn ghost" type="button" data-billing="monthly" data-plan="Starter" data-amt="499">₹499/mo</button>
+              </div>
+            </div>
+
+            <div class="plan featured">
+              <div class="tag">Most Popular</div>
+              <h3>Plus Plan</h3>
+              <div class="price"><strong>₹7,999</strong><span>/year</span></div>
+              <div class="muted">For serious savers who want guardrails.</div>
+              <ul>
+                <li>Everything in Starter</li>
+                <li>Smart “salary step-up” suggestions</li>
+                <li>Goal protection mode (withdrawal friction)</li>
+                <li>Quarterly portfolio health review (digital)</li>
+                <li>1 advisor call / year</li>
+              </ul>
+              <div style="margin-top:auto; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn primary" type="button" data-plan="Plus" data-amt="7999">Choose Plus</button>
+                <button class="btn ghost" type="button" data-billing="monthly" data-plan="Plus" data-amt="799">₹799/mo</button>
+              </div>
+            </div>
+
+            <div class="plan">
+              <div class="tag">Premium</div>
+              <h3>Premium Plan</h3>
+              <div class="price"><strong>₹11,999</strong><span>/year</span></div>
+              <div class="muted">For families + multiple goals.</div>
+              <ul>
+                <li>Everything in Plus</li>
+                <li>2 goals at once (e.g., retirement + child education)</li>
+                <li>2 advisor calls / year</li>
+                <li>Tax checklist + annual review</li>
+                <li>Priority support</li>
+              </ul>
+              <div style="margin-top:auto; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn primary" type="button" data-plan="Premium" data-amt="11999">Choose Premium</button>
+                <button class="btn ghost" type="button" data-billing="monthly" data-plan="Premium" data-amt="1199">₹1,199/mo</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="sectionPad">
+            <div class="miniCard">
+              <div class="miniTitle">Optional add-on</div>
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                <div>
+                  <strong>Managed Portfolio Add-On</strong>
+                  <div class="muted" style="margin-top:6px;">
+                    For people who want us to continuously manage & rebalance as your life changes.
+                  </div>
+                </div>
+                <div class="badge">0.50% / year</div>
+              </div>
+              <div class="muted" style="margin-top:10px;">
+                Charged only if you opt in. Flat plans above remain the default.
+              </div>
+              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn" type="button" id="addOnBtn">Add 0.50% add-on</button>
+                <button class="btn" type="button" id="removeAddOnBtn" style="display:none;">Remove add-on</button>
+              </div>
+            </div>
+
+            <div class="warnbox" id="transparencyBox">
+              Transparency promise: no product commissions, no hidden charges, and you can cancel renewal anytime.
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Summary + Payment -->
+        <div class="sectionPad">
+          <div class="miniCard">
+            <div class="miniTitle">Your plan summary</div>
+
+            <div class="kpi">
+              <div>
+                <strong id="sumGoal">—</strong><br>
+                <span style="color:var(--muted); font-size:13px;">Goal</span>
+              </div>
+              <div class="badge" id="sumYears">—</div>
+            </div>
+
+            <div class="kpi">
+              <div>
+                <strong id="sumSalary">—</strong><br>
+                <span style="color:var(--muted); font-size:13px;">Monthly in-hand</span>
+              </div>
+              <div class="badge">Income</div>
+            </div>
+
+            <div class="kpi">
+              <div>
+                <strong id="sumInvest">—</strong><br>
+                <span style="color:var(--muted); font-size:13px;">Monthly investment</span>
+              </div>
+              <div class="badge" id="sumPct">—</div>
+            </div>
+          </div>
+
+          <div class="miniCard">
+            <div class="miniTitle">Selected plan</div>
+            <div class="kpi">
+              <div>
+                <strong id="chosenPlan">Not selected</strong><br>
+                <span style="color:var(--muted); font-size:13px;">Pricing</span>
+              </div>
+              <div class="badge" id="chosenAmt">—</div>
+            </div>
+            <div class="muted" id="addOnLine" style="display:none; margin-top:6px;">
+              Includes Managed Portfolio Add-On (0.50%/year).
+            </div>
+
+            <div class="divider" style="margin:12px 0;"></div>
+
+            <div class="miniTitle">Pay securely</div>
+            <div class="muted">Demo checkout (for class project). No real payment is processed.</div>
+
+            <div class="payGrid">
+              <button class="payBtn" type="button" data-pay="UPI">
+                <span>UPI</span><small>PhonePe / GPay / Paytm</small>
+              </button>
+              <button class="payBtn" type="button" data-pay="Card">
+                <span>Card</span><small>Debit / Credit</small>
+              </button>
+              <button class="payBtn" type="button" data-pay="NetBanking">
+                <span>NetBanking</span><small>All major banks</small>
+              </button>
+              <button class="payBtn" type="button" data-pay="EMI">
+                <span>EMI</span><small>3–12 months</small>
+              </button>
+            </div>
+
+            <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn primary" id="payNowBtn" type="button" disabled>Pay & Continue →</button>
+              <a class="btn" href="planner.html">Edit my plan</a>
+            </div>
+
+            <div class="muted" style="margin-top:10px;">
+              By continuing you agree to the advisory terms and fee disclosure.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>© <span id="year"></span> FutureLock</div>
+        <div style="display:flex; gap:12px;">
+          <a href="index.html">Home</a>
+          <span style="opacity:.5;">•</span>
+          <a href="planner.html">Plan</a>
+          <span style="opacity:.5;">•</span>
+          <a href="pricing.html">Pricing</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modalBack" id="modalBack">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Confirm checkout</h3>
+      <p id="modalText">—</p>
+      <div class="modalActions">
+        <button class="btn" id="cancelModalBtn" type="button">Cancel</button>
+        <button class="btn primary" id="confirmModalBtn" type="button">Confirm →</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const $ = (id) => document.getElementById(id);
+      const INR = (n) => "₹" + Math.round(Number(n || 0)).toLocaleString("en-IN");
+
+      $("year").textContent = new Date().getFullYear();
+
+      // --- B2B skip logic ---
+      // If employer sets this flag, employee bypasses pricing.
+      const isB2B = localStorage.getItem("futurelock_b2b_user") === "true";
+      if (isB2B) {
+        // show continue button instead of pricing checkout
+        $("skipBtn").style.display = "inline-flex";
+        $("skipBtn").addEventListener("click", () => {
+          window.location.href = "dashboard.html"; // create later
+        });
+      }
+
+      // --- Load plan summary from localStorage ---
+      let plan = null;
+      try {
+        const raw = localStorage.getItem("futurelock_plan_v1");
+        if (raw) plan = JSON.parse(raw);
+      } catch (e) {}
+
+      const goalText = plan
+        ? (plan.goal === "Other" ? (plan.otherGoal || "Other") : plan.goal)
+        : "—";
+
+      $("sumGoal").textContent = goalText;
+
+      if (plan && plan.startYear && plan.targetYear) {
+        const yrs = Number(plan.targetYear) - Number(plan.startYear);
+        $("sumYears").textContent = (yrs > 0 ? yrs : "—") + (yrs > 0 ? " yrs" : "");
+      } else {
+        $("sumYears").textContent = "—";
+      }
+
+      $("sumSalary").textContent = plan ? INR(plan.salaryMonthly) : "—";
+      $("sumInvest").textContent = plan ? INR(plan.monthlyInvestment) : "—";
+
+      if (plan && plan.salaryMonthly > 0 && plan.monthlyInvestment > 0) {
+        const pct = (plan.monthlyInvestment / plan.salaryMonthly) * 100;
+        $("sumPct").textContent = pct.toFixed(0) + "%";
+      } else {
+        $("sumPct").textContent = "—";
+      }
+
+      // --- Pricing state ---
+      let chosen = {
+        planName: null,
+        amount: null,
+        billing: "yearly",
+        addOn: false,
+        payMethod: null
+      };
+
+      function renderChosen() {
+        $("chosenPlan").textContent = chosen.planName ? ${chosen.planName} (${chosen.billing}) : "Not selected";
+        $("chosenAmt").textContent = chosen.amount ? INR(chosen.amount) : "—";
+        $("addOnLine").style.display = chosen.addOn ? "block" : "none";
+        $("payNowBtn").disabled = !(chosen.planName && chosen.amount && chosen.payMethod) || isB2B;
+      }
+
+      // Plan buttons
+      document.querySelectorAll("[data-plan][data-amt]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          chosen.planName = btn.dataset.plan;
+          chosen.amount = Number(btn.dataset.amt);
+          chosen.billing = btn.dataset.billing === "monthly" ? "monthly" : "yearly";
+          renderChosen();
+        });
+      });
+
+      // Add-on toggle
+      $("addOnBtn").addEventListener("click", () => {
+        chosen.addOn = true;
+        $("addOnBtn").style.display = "none";
+        $("removeAddOnBtn").style.display = "inline-flex";
+        renderChosen();
+      });
+      $("removeAddOnBtn").addEventListener("click", () => {
+        chosen.addOn = false;
+        $("removeAddOnBtn").style.display = "none";
+        $("addOnBtn").style.display = "inline-flex";
+        renderChosen();
+      });
+
+      // Payment method buttons
+      document.querySelectorAll("[data-pay]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          chosen.payMethod = btn.dataset.pay;
+
+          // visual selection
+          document.querySelectorAll("[data-pay]").forEach(b => b.style.outline = "none");
+          btn.style.outline = "3px solid rgba(46,165,106,0.35)";
+
+          renderChosen();
+        });
+      });
+
+      // Modal
+      const openModal = (text) => {
+        $("modalText").textContent = text;
+        $("modalBack").style.display = "flex";
+      };
+      const closeModal = () => $("modalBack").style.display = "none";
+
+      $("cancelModalBtn").addEventListener("click", closeModal);
+      $("modalBack").addEventListener("click", (e) => { if (e.target === $("modalBack")) closeModal(); });
+
+      // Pay now
+      $("payNowBtn").addEventListener("click", () => {
+        if (!chosen.planName || !chosen.amount || !chosen.payMethod) return;
+
+        const line = ${chosen.planName} (${chosen.billing}) • ${INR(chosen.amount)} • Pay via ${chosen.payMethod} +
+                     (chosen.addOn ? " • + Managed Add-On (0.50%/yr)" : "");
+
+        openModal(You’re about to continue with: ${line}.);
+      });
+
+      // Confirm checkout (demo)
+      $("confirmModalBtn").addEventListener("click", () => {
+        // Save pricing selection
+        localStorage.setItem("futurelock_pricing_v1", JSON.stringify({
+          ...chosen,
+          confirmedAt: new Date().toISOString()
+        }));
+
+        closeModal();
+
+        // Proceed to final page (create next)
+        window.location.href = "dashboard.html";
+      });
+
+      renderChosen();
+    });
+  </script>
+</body>
+</html>
