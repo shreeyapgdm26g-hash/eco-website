@@ -601,7 +601,7 @@
         return true;
       }
 
-      function saveData() {
+     function saveData() {
    if (!validateForm()) return;
 
    const payload = {
@@ -621,7 +621,7 @@
 
    localStorage.setItem("futurelock_plan_v1", JSON.stringify(payload));
 
-   // ✅ Redirect to pricing page
+   // Go to pricing page
    window.location.href = "pricing.html";
 }
       
